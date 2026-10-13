@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Login — Abofra World School</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #0f0f0f;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .login-box {
+    width: 400px;
+    max-width: 95vw;
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-top: 4px solid #A4DE02;
+    padding: 40px 36px;
+  }
+
+  .logo-area {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 32px;
+  }
+  .logo-area img { width: 52px; height: 52px; object-fit: contain; }
+  .logo-area .name { font-size: 13px; font-weight: 900; color: #fff; text-transform: uppercase; letter-spacing: .06em; line-height: 1.4; }
+  .logo-area .sub  { font-size: 10px; color: #6b7280; text-transform: uppercase; letter-spacing: .1em; }
+
+  h2 {
+    font-size: 11px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: .15em; color: #A4DE02; margin-bottom: 24px;
+    padding-bottom: 12px; border-bottom: 1px solid #2a2a2a;
+  }
+
+  label {
+    display: block; font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .08em;
+    color: #9ca3af; margin-bottom: 6px;
+  }
+  input[type="text"], input[type="password"] {
+    width: 100%; background: #111; border: 1px solid #2a2a2a;
+    color: #e5e7eb; padding: 11px 14px; font-size: 14px;
+    border-radius: 2px; outline: none; font-family: inherit;
+    margin-bottom: 18px; transition: border-color .2s;
+  }
+  input:focus { border-color: #A4DE02; }
+
+  .btn-login {
+    width: 100%; background: #A4DE02; color: #1a1a1a;
+    border: none; padding: 13px; font-size: 12px;
+    font-weight: 900; letter-spacing: .15em; text-transform: uppercase;
+    cursor: pointer; border-radius: 2px; transition: background .2s;
+    margin-top: 4px;
+  }
+  .btn-login:hover { background: #8fc400; }
+
+  .error {
+    background: #ef444422; border: 1px solid #ef4444;
+    color: #ef4444; font-size: 12px; padding: 10px 14px;
+    border-radius: 2px; margin-bottom: 16px; display: none;
+  }
+
+  .footer-note {
+    margin-top: 24px; text-align: center;
+    font-size: 11px; color: #4b5563;
+  }
+</style>
+</head>
+<body>
+
+<div class="login-box">
+  <div class="logo-area">
+    <img src="/logo.png" onerror="this.style.display='none'" />
+    <div>
+      <div class="name">Abofra World School</div>
+      <div class="sub">Admin Panel</div>
+    </div>
+  </div>
+
+  <h2>Sign In</h2>
+
+  <div class="error" id="error-msg">Invalid username or password</div>
+
+  <form onsubmit="doLogin(event)">
+    <label>Username</label>
+    <input type="text" id="username" placeholder="admin" autocomplete="username" />
+
+    <label>Password</label>
+    <input type="password" id="password" placeholder="••••••••" autocomplete="current-password" />
+
+    <button type="submit" class="btn-login">Sign In</button>
+  </form>
+
+  <div class="footer-note">Abofra World School &copy; 2026</div>
+</div>
+
+<script>
+async function doLogin(e) {
+  e.preventDefault()
+  const username = document.getElementById('username').value
+  const password = document.getElementById('password').value
+  const err      = document.getElementById('error-msg')
+  err.style.display = 'none'
+
+  try {
+    const res  = await fetch('/admin/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password }),
+    })
+    const data = await res.json()
+    if (data.success) {
+      localStorage.setItem('abofra-admin', data.token)
+      localStorage.setItem('abofra-role', data.role)
+      localStorage.setItem('abofra-display', data.displayName)
+      window.location.href = '/admin'
+    } else {
+      err.style.display = 'block'
+    }
+  } catch (err2) {
+    err.textContent = 'Cannot connect to server. Is the backend running?'
+    err.style.display = 'block'
+  }
+}
+</script>
+</body>
+</html>

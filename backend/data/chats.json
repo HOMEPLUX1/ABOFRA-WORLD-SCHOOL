@@ -1,0 +1,127 @@
+[
+  {
+    "id": "1791932548817",
+    "name": "emma",
+    "startedAt": "2026-10-13T23:02:28.817Z",
+    "status": "open",
+    "flow": null,
+    "messages": [
+      {
+        "from": "user",
+        "text": "location",
+        "time": "2026-10-13T23:02:28.817Z"
+      },
+      {
+        "from": "bot",
+        "text": "📍 We are located at Archbishop Sarpong Road, TUC AK-298-7816, Kumasi, Ghana. You can also call us on +233 556 592 410 for more help. [SHOW_MAP]",
+        "time": "2026-10-13T23:02:28.817Z"
+      }
+    ]
+  },
+  {
+    "id": "1791899687684",
+    "name": "emmanuel",
+    "startedAt": "2026-10-13T13:54:47.684Z",
+    "status": "open",
+    "flow": null,
+    "messages": [
+      {
+        "from": "user",
+        "text": "fees",
+        "time": "2026-10-13T13:54:47.684Z"
+      },
+      {
+        "from": "bot",
+        "text": "For information about school fees, please contact our office directly on +233 556 592 410 or email abofraworldschool@gmail.com. Our fees vary by level.",
+        "time": "2026-10-13T13:54:47.684Z"
+      },
+      {
+        "from": "user",
+        "text": "location",
+        "time": "2026-10-13T13:55:09.712Z"
+      },
+      {
+        "from": "bot",
+        "text": "📍 We are located at Archbishop Sarpong Road, TUC AK-298-7816, Kumasi, Ghana. You can also call us on +233 556 592 410 for more help. [SHOW_MAP]",
+        "time": "2026-10-13T13:55:09.712Z"
+      }
+    ]
+  },
+  {
+    "id": "1791899608322",
+    "name": "hi",
+    "startedAt": "2026-10-13T13:53:28.322Z",
+    "status": "pending",
+    "flow": null,
+    "messages": [
+      {
+        "from": "user",
+        "text": "no body",
+        "time": "2026-10-13T13:53:28.322Z"
+      },
+      {
+        "from": "bot",
+        "text": "Thank you for your message. Our team will get back to you shortly. You can also call us on +233 556 592 410.",
+        "time": "2026-10-13T13:53:28.322Z"
+      },
+      {
+        "from": "user",
+        "text": "i am emmanuel",
+        "time": "2026-10-13T13:53:54.282Z"
+      },
+      {
+        "from": "bot",
+        "text": "Thank you for your message. Our team will get back to you shortly. You can also call us on +233 556 592 410.",
+        "time": "2026-10-13T13:53:54.282Z"
+      }
+    ]
+  },
+  {
+    "id": "1788191697890",
+    "name": "emmanuel",
+    "startedAt": "2026-08-31T15:54:57.890Z",
+    "status": "open",
+    "flow": null,
+    "messages": [
+      {
+        "from": "user",
+        "text": "admission",
+        "time": "2026-08-31T15:54:57.890Z"
+      },
+      {
+        "from": "bot",
+        "text": "To apply for admission at Abofra World School, please call us on +233 556 592 410 or fill in our enquiry form and we will get in touch with you. [SHOW_ADMISSION_FORM]",
+        "time": "2026-08-31T15:54:57.890Z"
+      },
+      {
+        "from": "user",
+        "text": "i want a call",
+        "time": "2026-08-31T15:55:31.810Z"
+      },
+      {
+        "from": "bot",
+        "text": "You can reach us by phone on +233 556 592 410 / +233 243 267 237 or by email at abofraworldschool@gmail.com.",
+        "time": "2026-08-31T15:55:31.810Z"
+      }
+    ]
+  },
+  {
+    "id": "1783004140901",
+    "name": "AUNTIE SANDRA",
+    "startedAt": "2026-07-02T14:55:40.901Z",
+    "status": "pending",
+    "flow": null,
+    "messages": [
+      {
+        "from": "user",
+        "text": "location",
+        "time": "2026-07-02T14:55:40.901Z"
+      },
+      {
+        "from": "bot",
+        "text": "We are located at Archbishop Sarpong Road, TUC AK-298-7816, Kumasi, Ghana. You can also call us on +233 556 592 410 for more help.",
+        "time": "2026-07-02T14:55:40.901Z"
+      }
+    ]
+  }
+]

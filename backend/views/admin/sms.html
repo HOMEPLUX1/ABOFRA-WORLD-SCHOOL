@@ -1,0 +1,1998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>School Management — Abofra World School</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --green:#82c906;--lime:#a8e000;--dark:#0a0f1e;--surface:rgba(255,255,255,.06);
+  --border:rgba(255,255,255,.10);--text:#e8edf5;--muted:#8b9ab5;
+  --blue:#38bdf8;--purple:#a78bfa;--amber:#fbbf24;--rose:#f87171;
+}
+body{
+  font-family:'Segoe UI',sans-serif;
+  background:linear-gradient(135deg,#0a0f1e 0%,#0e1a2e 40%,#0f2010 70%,#0a1a0a 100%);
+  color:var(--text);min-height:100vh;
+}
+
+/* NAV */
+.topbar{
+  background:rgba(10,15,30,.85);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  padding:14px 28px;display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+}
+.topbar .logo{font-weight:800;font-size:16px;color:var(--green);letter-spacing:.04em}
+.topbar a{
+  color:rgba(255,255,255,.6);text-decoration:none;font-size:13px;font-weight:600;
+  margin-left:20px;padding:6px 14px;border-radius:8px;border:1px solid var(--border);
+  transition:all .2s;
+}
+.topbar a:hover{color:var(--green);border-color:var(--green);background:rgba(130,201,6,.08)}
+
+/* TABS */
+.tabs{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(120px,1fr));
+  gap:12px;padding:20px 24px;
+  background:rgba(10,15,30,.6);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+}
+.tab{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:8px;padding:18px 10px;cursor:pointer;
+  background:rgba(255,255,255,.05);border:1px solid var(--border);
+  border-radius:14px;font-size:12px;font-weight:700;
+  color:var(--muted);text-align:center;white-space:nowrap;
+  transition:all .2s;
+}
+.tab .tab-icon{font-size:26px;line-height:1}
+.tab.active{
+  color:var(--green);border-color:rgba(130,201,6,.5);
+  background:rgba(130,201,6,.1);
+  box-shadow:0 4px 20px rgba(130,201,6,.15);
+}
+.tab:hover:not(.active){color:var(--text);background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.18)}
+
+/* SECTIONS */
+.section{display:none;padding:28px}
+.section.active{display:block}
+
+/* STAT CARDS */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px;margin-bottom:28px}
+.stat-card{
+  background:var(--surface);backdrop-filter:blur(20px);
+  border:1px solid var(--border);border-radius:16px;
+  padding:22px 16px;text-align:center;
+  position:relative;overflow:hidden;
+  transition:transform .2s,box-shadow .2s;
+}
+.stat-card:hover{transform:translateY(-3px);box-shadow:0 8px 32px rgba(130,201,6,.15)}
+.stat-card::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(130,201,6,.06),transparent);
+  pointer-events:none;
+}
+.stat-card:nth-child(2)::before{background:linear-gradient(135deg,rgba(56,189,248,.06),transparent)}
+.stat-card:nth-child(3)::before{background:linear-gradient(135deg,rgba(167,139,250,.06),transparent)}
+.stat-card:nth-child(4)::before{background:linear-gradient(135deg,rgba(251,191,36,.06),transparent)}
+.stat-card:nth-child(5)::before{background:linear-gradient(135deg,rgba(248,113,113,.06),transparent)}
+.stat-card .num{font-size:34px;font-weight:800;color:var(--green);line-height:1}
+.stat-card:nth-child(2) .num{color:var(--blue)}
+.stat-card:nth-child(3) .num{color:var(--purple)}
+.stat-card:nth-child(4) .num{color:var(--amber)}
+.stat-card:nth-child(5) .num{color:var(--rose)}
+.stat-card .lbl{font-size:12px;color:var(--muted);margin-top:6px;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+
+/* GLASS CARDS */
+.card{
+  background:var(--surface);backdrop-filter:blur(20px);
+  border:1px solid var(--border);border-radius:16px;
+  overflow:hidden;margin-bottom:24px;
+}
+.card-header{
+  padding:18px 22px;display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--border);
+  background:rgba(255,255,255,.03);
+}
+.card-header h3{font-size:15px;font-weight:700;color:var(--text)}
+
+/* BUTTONS */
+.btn{
+  padding:8px 18px;border:none;border-radius:10px;
+  cursor:pointer;font-size:13px;font-weight:700;
+  transition:all .2s;letter-spacing:.02em;
+}
+.btn-green{background:linear-gradient(135deg,#82c906,#6aab00);color:#fff}
+.btn-green:hover{background:linear-gradient(135deg,#9de007,#82c906);box-shadow:0 4px 16px rgba(130,201,6,.35)}
+.btn-red{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff}
+.btn-red:hover{box-shadow:0 4px 16px rgba(239,68,68,.35)}
+.btn-blue{background:linear-gradient(135deg,#38bdf8,#0ea5e9);color:#fff}
+.btn-blue:hover{box-shadow:0 4px 16px rgba(56,189,248,.35)}
+.btn-sm{padding:5px 10px;font-size:12px}
+
+/* TABLES */
+table{width:100%;border-collapse:collapse}
+th,td{padding:13px 18px;text-align:left;font-size:13px;border-bottom:1px solid rgba(255,255,255,.06)}
+th{
+  background:rgba(255,255,255,.04);font-weight:700;
+  color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.08em;
+}
+tr:hover td{background:rgba(130,201,6,.04)}
+td{color:var(--text)}
+
+/* BADGES */
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.badge-green{background:rgba(130,201,6,.18);color:#a8e000;border:1px solid rgba(130,201,6,.25)}
+.badge-blue{background:rgba(56,189,248,.15);color:#7dd3fc;border:1px solid rgba(56,189,248,.25)}
+.badge-yellow{background:rgba(251,191,36,.15);color:#fcd34d;border:1px solid rgba(251,191,36,.25)}
+
+/* MODALS */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:1000;align-items:center;justify-content:center}
+.overlay.show{display:flex}
+.modal{
+  background:linear-gradient(135deg,rgba(20,30,50,.98),rgba(10,20,15,.98));
+  border:1px solid var(--border);border-radius:20px;
+  width:90%;max-width:540px;max-height:90vh;overflow-y:auto;
+  box-shadow:0 24px 80px rgba(0,0,0,.6);
+}
+.modal-header{
+  padding:22px 26px;border-bottom:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;
+  background:rgba(255,255,255,.03);
+}
+.modal-header h3{font-size:17px;font-weight:700;color:var(--text)}
+.modal-body{padding:26px}
+.modal-footer{padding:18px 26px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px}
+.close-btn{background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);transition:color .2s}
+.close-btn:hover{color:var(--text)}
+
+/* FORM */
+.form-group{margin-bottom:18px}
+.form-group label{display:block;font-size:12px;font-weight:700;margin-bottom:7px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+.form-group input,.form-group select,.form-group textarea{
+  width:100%;padding:11px 14px;
+  background:rgba(255,255,255,.06);border:1.5px solid var(--border);
+  border-radius:10px;font-size:14px;outline:none;
+  color:var(--text);font-family:inherit;
+  transition:border-color .2s,box-shadow .2s;
+}
+.form-group input::placeholder{color:rgba(139,154,181,.5)}
+.form-group select option{background:#0e1a2e;color:var(--text)}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{
+  border-color:var(--green);box-shadow:0 0 0 3px rgba(130,201,6,.15);
+}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+/* QR */
+.qr-box{text-align:center;padding:20px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;margin-top:14px}
+.qr-box img{width:160px;height:160px;border-radius:8px}
+.id-badge{background:rgba(130,201,6,.18);color:var(--green);border:1px solid rgba(130,201,6,.3);padding:8px 18px;border-radius:8px;font-weight:800;font-size:15px;display:inline-block;margin-top:10px;letter-spacing:.1em}
+
+/* SEARCH */
+.search-bar{padding:0 22px 18px}
+.search-bar input{
+  width:100%;max-width:340px;padding:10px 16px;
+  background:rgba(255,255,255,.06);border:1.5px solid var(--border);
+  border-radius:10px;font-size:13px;outline:none;color:var(--text);font-family:inherit;
+  transition:border-color .2s;
+}
+.search-bar input::placeholder{color:rgba(139,154,181,.5)}
+.search-bar input:focus{border-color:var(--green)}
+
+/* NOTICES */
+.notice-item{padding:16px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.notice-item:last-child{border-bottom:none}
+.notice-item .nt{font-weight:700;font-size:14px;color:var(--text)}
+.notice-item .nb{color:var(--muted);font-size:13px;margin-top:5px}
+.notice-item .nm{font-size:11px;color:rgba(139,154,181,.6);margin-top:5px}
+.audience-tag{
+  font-size:11px;font-weight:700;padding:3px 10px;border-radius:10px;
+  background:rgba(56,189,248,.15);color:#7dd3fc;border:1px solid rgba(56,189,248,.2);margin-left:8px;
+}
+
+/* CHECKIN */
+.checkin-row{display:flex;gap:12px;margin-bottom:16px;align-items:flex-end}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="logo">🎓 Abofra World School — SMS</span>
+  <div>
+    <a href="/admin">← Back to Admin</a>
+    <a href="/admin/login" onclick="localStorage.clear()">Logout</a>
+  </div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="showTab('dashboard')"><span class="tab-icon">📊</span>Dashboard</div>
+  <div class="tab" onclick="showTab('students')"><span class="tab-icon">🎒</span>Students</div>
+  <div class="tab" onclick="showTab('teachers')"><span class="tab-icon">👩‍🏫</span>Teachers</div>
+  <div class="tab" onclick="showTab('parents')"><span class="tab-icon">👨‍👩‍👧</span>Parents</div>
+  <div class="tab" onclick="showTab('staff')"><span class="tab-icon">👷</span>Staff</div>
+  <div class="tab" onclick="showTab('classes')"><span class="tab-icon">🏫</span>Classes</div>
+  <div class="tab" onclick="showTab('checkin')"><span class="tab-icon">✅</span>Check-In</div>
+  <div class="tab" onclick="showTab('subjects')"><span class="tab-icon">📚</span>Subjects</div>
+  <div class="tab" onclick="showTab('scores')"><span class="tab-icon">📝</span>Scores</div>
+  <div class="tab" onclick="showTab('fees')"><span class="tab-icon">💰</span>Fees</div>
+  <div class="tab" onclick="showTab('notices')"><span class="tab-icon">📢</span>Notices</div>
+  <div class="tab" onclick="showTab('receipts')"><span class="tab-icon">🧾</span>Receipts</div>
+  <div class="tab" onclick="showTab('reports');loadReports()"><span class="tab-icon">📋</span>Reports</div>
+  <div class="tab" onclick="window.location.href='/admin/credentials'"><span class="tab-icon">🔐</span>Credentials</div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="tab-dashboard" class="section active">
+  <div class="stats-row" id="stats-row">
+    <div class="stat-card"><div class="num" id="st-students">—</div><div class="lbl">Students</div></div>
+    <div class="stat-card"><div class="num" id="st-teachers">—</div><div class="lbl">Teachers</div></div>
+    <div class="stat-card"><div class="num" id="st-parents">—</div><div class="lbl">Parents</div></div>
+    <div class="stat-card"><div class="num" id="st-staff">—</div><div class="lbl">Staff</div></div>
+    <div class="stat-card"><div class="num" id="st-classes">—</div><div class="lbl">Classes</div></div>
+    <div class="stat-card"><div class="num" id="st-checkins">—</div><div class="lbl">Check-ins Today</div></div>
+  </div>
+  <div class="card">
+    <div class="card-header"><h3>📢 Recent Notices</h3><button class="btn btn-green" onclick="showTab('notices')">View All</button></div>
+    <div style="padding:0 20px" id="dash-notices"><p style="padding:16px 0;color:#999">Loading...</p></div>
+  </div>
+</div>
+
+<!-- STUDENTS -->
+<div id="tab-students" class="section">
+  <div class="card">
+    <div class="card-header">
+      <h3>🎒 Students</h3>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <a href="/api/sms/students/template" class="btn" style="background:rgba(45,125,50,.8);color:#fff;text-decoration:none;font-size:13px;padding:8px 14px">⬇ Template</a>
+        <button class="btn" style="background:rgba(49,130,206,.8);color:#fff;font-size:13px" onclick="openImport('student')">📂 Import</button>
+        <a href="/api/sms/export/students" class="btn" style="background:rgba(130,201,6,.15);color:var(--green);border:1px solid rgba(130,201,6,.3);text-decoration:none;font-size:13px;padding:8px 14px">📤 Export</a>
+        <button class="btn btn-green" onclick="openModal('student')">+ Add Student</button>
+      </div>
+    </div>
+    <div class="search-bar"><input type="text" placeholder="Search by name or ID..." oninput="filterTable('students-table',this.value)"/></div>
+    <div style="overflow-x:auto"><table id="students-table">
+      <thead><tr><th>Photo</th><th>ID</th><th>Name</th><th>Age</th><th>Gender</th><th>Class</th><th>Admitted</th><th>Parent</th><th>Special Needs</th><th>Actions</th></tr></thead>
+      <tbody id="students-body"><tr><td colspan="6" style="text-align:center;color:#999;padding:20px">Loading...</td></tr></tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- PEOPLE (Teachers + Parents combined) -->
+<div id="tab-people" class="section">
+  <div class="card">
+    <div class="card-header">
+      <h3>👩‍🏫 Teachers</h3>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <a href="/api/sms/teachers/template" class="btn" style="background:rgba(45,125,50,.8);color:#fff;text-decoration:none;font-size:13px;padding:8px 14px">⬇ Template</a>
+        <button class="btn" style="background:rgba(49,130,206,.8);color:#fff;font-size:13px" onclick="openImport('teacher')">📂 Import</button>
+        <a href="/api/sms/export/teachers" class="btn" style="background:rgba(130,201,6,.15);color:var(--green);border:1px solid rgba(130,201,6,.3);text-decoration:none;font-size:13px;padding:8px 14px">📤 Export</a>
+        <button class="btn btn-green" onclick="openModal('teacher')">+ Add Teacher</button>
+      </div>
+    </div>
+    <div class="search-bar"><input type="text" placeholder="Search teacher..." oninput="filterTable('people-teachers-table',this.value)"/></div>
+    <div style="overflow-x:auto"><table id="people-teachers-table">
+      <thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Email</th><th>Qualification</th><th>Actions</th></tr></thead>
+      <tbody id="people-teachers-body"><tr><td colspan="6" style="text-align:center;color:#999;padding:20px">Loading...</td></tr></tbody>
+    </table></div>
+  </div>
+  <div class="card" style="margin-top:20px">
+    <div class="card-header">
+      <h3>👨‍👩‍👧 Parents</h3>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <a href="/api/sms/parents/template" class="btn" style="background:rgba(45,125,50,.8);color:#fff;text-decoration:none;font-size:13px;padding:8px 14px">⬇ Template</a>
+        <button class="btn" style="background:rgba(49,130,206,.8);color:#fff;font-size:13px" onclick="openImport('parent')">📂 Import</button>
+        <a href="/api/sms/export/parents" class="btn" style="background:rgba(130,201,6,.15);color:var(--green);border:1px solid rgba(130,201,6,.3);text-decoration:none;font-size:13px;padding:8px 14px">📤 Export</a>
+        <button class="btn btn-green" onclick="openModal('parent')">+ Add Parent</button>
+      </div>
+    </div>
+    <div class="search-bar"><input type="text" placeholder="Search parent..." oninput="filterTable('people-parents-table',this.value)"/></div>
+    <div style="overflow-x:auto"><table id="people-parents-table">
+      <thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Children</th><th>Actions</th></tr></thead>
+      <tbody id="people-parents-body"><tr><td colspan="5" style="text-align:center;color:#999;padding:20px">Loading...</td></tr></tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- TEACHERS -->
+<div id="tab-teachers" class="section">
+  <div class="card">
+    <div class="card-header">
+      <h3>👩‍🏫 Teachers</h3>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <a href="/api/sms/teachers/template" class="btn" style="background:rgba(45,125,50,.8);color:#fff;text-decoration:none;font-size:13px;padding:8px 14px">⬇ Template</a>
+        <button class="btn" style="background:rgba(49,130,206,.8);color:#fff;font-size:13px" onclick="openImport('teacher')">📂 Import</button>
+        <a href="/api/sms/export/teachers" class="btn" style="background:rgba(130,201,6,.15);color:var(--green);border:1px solid rgba(130,201,6,.3);text-decoration:none;font-size:13px;padding:8px 14px">📤 Export</a>
+        <button class="btn btn-green" onclick="openModal('teacher')">+ Add Teacher</button>
+      </div>
+    </div>
+    <div class="search-bar"><input type="text" placeholder="Search teacher..." oninput="filterTable('teachers-table',this.value)"/></div>
+    <div style="overflow-x:auto"><table id="teachers-table">
+      <thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Email</th><th>Qualification</th><th>Actions</th></tr></thead>
+      <tbody id="teachers-body"><tr><td colspan="6" style="text-align:center;color:#999;padding:20px">Loading...</td></tr></tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- PARENTS -->
+<div id="tab-parents" class="section">
+  <div class="card">
+    <div class="card-header">
+      <h3>👨‍👩‍👧 Parents</h3>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <a href="/api/sms/parents/template" class="btn" style="background:rgba(45,125,50,.8);color:#fff;text-decoration:none;font-size:13px;padding:8px 14px">⬇ Template</a>
+        <button class="btn" style="background:rgba(49,130,206,.8);color:#fff;font-size:13px" onclick="openImport('parent')">📂 Import</button>
+        <a href="/api/sms/export/parents" class="btn" style="background:rgba(130,201,6,.15);color:var(--green);border:1px solid rgba(130,201,6,.3);text-decoration:none;font-size:13px;padding:8px 14px">📤 Export</a>
+        <button class="btn btn-green" onclick="openModal('parent')">+ Add Parent</button>
+      </div>
+    </div>
+    <div class="search-bar"><input type="text" placeholder="Search parent..." oninput="filterTable('parents-table',this.value)"/></div>
+    <div style="overflow-x:auto"><table id="parents-table">
+      <thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Children</th><th>QR Code</th><th>Actions</th></tr></thead>
+      <tbody id="parents-body"><tr><td colspan="6" style="text-align:center;color:#999;padding:20px">Loading...</td></tr></tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- STAFF -->
+<div id="tab-staff" class="section">
+  <div class="card">
+    <div class="card-header">
+      <h3>👷 Staff</h3>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <a href="/api/sms/staff/template" class="btn" style="background:rgba(45,125,50,.8);color:#fff;text-decoration:none;font-size:13px;padding:8px 14px">⬇ Template</a>
+        <button class="btn" style="background:rgba(49,130,206,.8);color:#fff;font-size:13px" onclick="openImport('staff')">📂 Import</button>
+        <a href="/api/sms/export/staff" class="btn" style="background:rgba(130,201,6,.15);color:var(--green);border:1px solid rgba(130,201,6,.3);text-decoration:none;font-size:13px;padding:8px 14px">📤 Export</a>
+        <button class="btn btn-green" onclick="openModal('staff')">+ Add Staff</button>
+      </div>
+    </div>
+    <div class="search-bar"><input type="text" placeholder="Search staff..." oninput="filterTable('staff-table',this.value)"/></div>
+    <div style="overflow-x:auto"><table id="staff-table">
+      <thead><tr><th>ID</th><th>Name</th><th>Role</th><th>Department</th><th>Phone</th><th>Actions</th></tr></thead>
+      <tbody id="staff-body"><tr><td colspan="6" style="text-align:center;color:#999;padding:20px">Loading...</td></tr></tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- CLASSES -->
+<div id="tab-classes" class="section">
+  <div class="card">
+    <div class="card-header">
+      <h3>🏫 Classes</h3>
+      <div style="display:flex;gap:8px">
+        <a href="/api/sms/export/classes" class="btn" style="background:rgba(130,201,6,.15);color:var(--green);border:1px solid rgba(130,201,6,.3);text-decoration:none;font-size:13px;padding:8px 14px">📤 Export</a>
+        <button class="btn btn-green" onclick="openModal('class')">+ Add Class</button>
+      </div>
+    </div>
+    <div style="overflow-x:auto"><table id="classes-table">
+      <thead><tr><th>Name</th><th>Level</th><th>Section</th><th>Class Teacher</th><th>Students</th><th>Actions</th></tr></thead>
+      <tbody id="classes-body"><tr><td colspan="6" style="text-align:center;color:#999;padding:20px">Loading...</td></tr></tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- CHECK-IN -->
+<div id="tab-checkin" class="section">
+  <div class="card">
+    <div class="card-header"><h3>✅ Student Check-In / Check-Out</h3></div>
+    <div style="padding:20px">
+      <div class="checkin-row">
+        <div class="form-group" style="margin:0;flex:1"><label>Student ID</label><input type="text" id="checkin-id" placeholder="Enter student ID e.g. AWS-2026-001"/></div>
+        <button class="btn btn-green" onclick="doCheckin('in')">Check In</button>
+        <button class="btn btn-blue" onclick="doCheckin('out')">Check Out</button>
+      </div>
+      <p id="checkin-msg" style="font-size:14px;margin-bottom:16px"></p>
+      <h4 style="margin-bottom:12px">Today's Check-Ins</h4>
+      <div style="overflow-x:auto"><table>
+        <thead><tr><th>Time</th><th>Student</th><th>ID</th><th>Class</th><th>Type</th></tr></thead>
+        <tbody id="checkins-body"><tr><td colspan="5" style="text-align:center;color:#999;padding:20px">Loading...</td></tr></tbody>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<!-- SUBJECTS -->
+<div id="tab-subjects" class="section">
+  <div class="card">
+    <div class="card-header">
+      <h3>📚 Subjects</h3>
+      <button class="btn btn-green" onclick="openModal('subject')">+ Add Subject</button>
+    </div>
+    <div style="padding:16px 20px;display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap">
+      <div class="form-group" style="margin:0;flex:1;min-width:180px">
+        <label>Filter by Class</label>
+        <select id="subj-class-filter" onchange="loadSubjects()">
+          <option value="">All Classes</option>
+        </select>
+      </div>
+    </div>
+    <div style="overflow-x:auto"><table id="subjects-table">
+      <thead><tr><th>Subject Name</th><th>Class</th><th>Teacher</th><th>Actions</th></tr></thead>
+      <tbody id="subjects-body"><tr><td colspan="4" style="text-align:center;color:#999;padding:20px">Loading...</td></tr></tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- SCORES -->
+<div id="tab-scores" class="section">
+  <div class="card">
+    <div class="card-header"><h3>📝 Enter Scores</h3></div>
+    <div style="padding:16px 20px;display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end">
+      <div class="form-group" style="margin:0;flex:1;min-width:160px">
+        <label>Class</label>
+        <select id="score-class" onchange="loadScoreSheet()">
+          <option value="">Select class</option>
+        </select>
+      </div>
+      <div class="form-group" style="margin:0;min-width:120px">
+        <label>Term</label>
+        <select id="score-term" onchange="loadScoreSheet()">
+          <option>Term 1</option><option>Term 2</option><option>Term 3</option>
+        </select>
+      </div>
+      <div class="form-group" style="margin:0;min-width:100px">
+        <label>Year</label>
+        <select id="score-year" onchange="loadScoreSheet()">
+        </select>
+      </div>
+    </div>
+    <div id="score-sheet" style="overflow-x:auto;padding:0 20px 20px">
+      <p style="color:#999;font-size:14px">Select a class to load the score sheet.</p>
+    </div>
+  </div>
+
+  <div class="card" id="report-card-section" style="display:none">
+    <div class="card-header"><h3>📋 Report Card Preview</h3></div>
+    <div id="report-card-body" style="padding:20px"></div>
+  </div>
+</div>
+
+<!-- FEES -->
+<div id="tab-fees" class="section">
+  <div class="card">
+    <div class="card-header"><h3>💰 Fee Management</h3>
+      <div style="display:flex;gap:8px">
+        <a href="/api/sms/export/fees" class="btn" style="background:rgba(130,201,6,.15);color:var(--green);border:1px solid rgba(130,201,6,.3);text-decoration:none;font-size:13px;padding:8px 14px">📤 Export</a>
+        <button class="btn btn-green" onclick="openModal('fee')">+ Add Fee</button>
+      </div>
+    </div>
+    <div style="padding:16px 20px;display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end">
+      <div class="form-group" style="margin:0;min-width:120px">
+        <label>Term</label>
+        <select id="fee-term-filter" onchange="loadFees()"><option>Term 1</option><option>Term 2</option><option>Term 3</option></select>
+      </div>
+      <div class="form-group" style="margin:0;min-width:100px">
+        <label>Year</label>
+        <select id="fee-year-filter" onchange="loadFees()"></select>
+      </div>
+      <div style="margin-top:auto">
+        <button class="btn btn-blue" onclick="loadFeeSummary()">📊 Summary View</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="fee-summary-card" style="display:none">
+    <div class="card-header"><h3>📊 Fee Summary</h3><button class="btn btn-sm" style="background:#e2e8f0" onclick="document.getElementById('fee-summary-card').style.display='none'">Close</button></div>
+    <div style="overflow-x:auto"><table>
+      <thead><tr><th>Student</th><th>ID</th><th>Class</th><th>Paid (GH₵)</th><th>Pending (GH₵)</th><th>Total (GH₵)</th></tr></thead>
+      <tbody id="fee-summary-body"></tbody>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h3>Fee Records</h3></div>
+    <div style="overflow-x:auto"><table>
+      <thead><tr><th>Student</th><th>Class</th><th>Type</th><th>Term</th><th>Amount (GH₵)</th><th>Status</th><th>Receipt</th><th>Actions</th></tr></thead>
+      <tbody id="fees-body"><tr><td colspan="8" style="text-align:center;color:#999;padding:20px">Loading...</td></tr></tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- NOTICES -->
+<div id="tab-notices" class="section">
+  <div class="card">
+    <div class="card-header"><h3>📢 School Notices</h3>
+      <div style="display:flex;gap:8px">
+        <a href="/api/sms/export/notices" class="btn" style="background:rgba(130,201,6,.15);color:var(--green);border:1px solid rgba(130,201,6,.3);text-decoration:none;font-size:13px;padding:8px 14px">📤 Export</a>
+        <button class="btn btn-green" onclick="openModal('notice')">+ Post Notice</button>
+      </div>
+    </div>
+    <div style="padding:0 20px 20px" id="notices-list"><p style="padding:16px 0;color:#999">Loading...</p></div>
+  </div>
+</div>
+
+<!-- RECEIPTS TAB -->
+<div id="tab-receipts" class="section">
+
+  <!-- Summary cards -->
+  <div class="stats-row" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr));margin-bottom:22px">
+    <div class="stat-card"><div class="num" id="rcp-total-paid" style="color:#34d399;font-size:22px">—</div><div class="lbl">Total Collected</div></div>
+    <div class="stat-card"><div class="num" id="rcp-total-pending" style="color:var(--amber);font-size:22px">—</div><div class="lbl">Outstanding</div></div>
+    <div class="stat-card"><div class="num" id="rcp-count-paid" style="color:var(--blue)">—</div><div class="lbl">Paid Receipts</div></div>
+    <div class="stat-card"><div class="num" id="rcp-count-pending" style="color:var(--rose)">—</div><div class="lbl">Unpaid</div></div>
+  </div>
+
+  <!-- Two-panel layout: student list LEFT, detail RIGHT -->
+  <div style="display:grid;grid-template-columns:320px 1fr;gap:20px;align-items:start">
+
+    <!-- LEFT: student list -->
+    <div class="card" style="margin-bottom:0">
+      <div class="card-header"><h3>👥 Students &amp; Parents</h3></div>
+      <div style="padding:12px 16px 8px">
+        <input type="text" id="rcp-search" placeholder="🔍 Search name, ID, parent..." oninput="filterStudentList()"
+          style="width:100%;padding:10px 14px;background:rgba(255,255,255,.06);border:1.5px solid var(--border);border-radius:10px;font-size:13px;color:var(--text);outline:none;font-family:inherit"/>
+      </div>
+      <div style="max-height:600px;overflow-y:auto" id="rcp-student-list">
+        <div style="padding:20px;color:#999;text-align:center">Loading students…</div>
+      </div>
+    </div>
+
+    <!-- RIGHT: detail panel -->
+    <div id="rcp-detail-panel">
+      <div class="card" style="margin-bottom:0">
+        <div style="padding:48px 32px;text-align:center;color:var(--muted)">
+          <div style="font-size:48px;margin-bottom:16px">🧾</div>
+          <div style="font-size:16px;font-weight:700;margin-bottom:8px">Select a student</div>
+          <div style="font-size:13px">Click any student on the left to view all their payments and outstanding fees</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Fee modal trigger (global) -->
+  <div id="rcp-add-fee-bar" style="display:none;position:fixed;bottom:28px;right:28px;z-index:200">
+    <button class="btn btn-green" style="padding:14px 24px;font-size:14px;box-shadow:0 8px 32px rgba(130,201,6,.4)" onclick="openAddFeeModal()">+ Add Fee / Payment</button>
+  </div>
+</div>
+
+<!-- REPORTS TAB -->
+<div id="tab-reports" class="section" style="display:none">
+
+  <!-- Controls bar -->
+  <div class="card" style="margin-bottom:20px">
+    <div style="padding:18px 22px;display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end">
+      <div>
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:6px">Class</label>
+        <select id="rpt-class" style="padding:10px 14px;background:rgba(255,255,255,.06);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-size:13px;min-width:180px">
+          <option value="">Select class…</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:6px">Term</label>
+        <select id="rpt-term" style="padding:10px 14px;background:rgba(255,255,255,.06);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-size:13px">
+          <option>Term 1</option><option>Term 2</option><option>Term 3</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:6px">Year</label>
+        <select id="rpt-year" style="padding:10px 14px;background:rgba(255,255,255,.06);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-size:13px">
+        </select>
+      </div>
+      <button class="btn btn-blue" style="padding:10px 20px" onclick="loadReportStudents()">🔍 Load Students</button>
+      <button id="rpt-print-all" class="btn btn-green" style="padding:10px 20px;display:none" onclick="printAllReports()">🖨 Print All Reports</button>
+    </div>
+  </div>
+
+  <!-- Summary stats -->
+  <div class="stats-row" id="rpt-stats" style="grid-template-columns:repeat(4,1fr);margin-bottom:20px;display:none">
+    <div class="stat-card"><div class="num" id="rpt-total-students" style="color:var(--blue)">—</div><div class="lbl">Students</div></div>
+    <div class="stat-card"><div class="num" id="rpt-class-avg" style="color:var(--green)">—</div><div class="lbl">Class Average</div></div>
+    <div class="stat-card"><div class="num" id="rpt-highest" style="color:var(--amber)">—</div><div class="lbl">Highest Score</div></div>
+    <div class="stat-card"><div class="num" id="rpt-pass-rate" style="color:#34d399">—</div><div class="lbl">Pass Rate</div></div>
+  </div>
+
+  <!-- Student list table -->
+  <div class="card" id="rpt-table-card" style="display:none">
+    <div class="card-header">
+      <h3>📋 Student Report Cards</h3>
+      <div style="display:flex;gap:8px">
+        <input id="rpt-search" type="text" placeholder="🔍 Filter student…" oninput="filterReportTable()" style="padding:8px 12px;background:rgba(255,255,255,.06);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;width:220px"/>
+      </div>
+    </div>
+    <div style="overflow-x:auto">
+      <table id="rpt-table">
+        <thead>
+          <tr>
+            <th>Pos</th><th>Student</th><th>ID</th><th id="rpt-subject-headers"></th>
+            <th>Total</th><th>Average</th><th>Grade</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="rpt-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="rpt-empty" style="padding:80px;text-align:center;color:var(--muted);display:none">
+    <div style="font-size:52px;margin-bottom:16px">📋</div>
+    <div style="font-size:16px;font-weight:700">No scores entered for this selection</div>
+    <div style="font-size:13px;margin-top:8px">Enter scores in the Scores tab first, then come back to generate reports.</div>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div id="modal-overlay" style="display:none;position:fixed;inset:0;z-index:1500;background:linear-gradient(135deg,#0a0f1e 0%,#0d1a2e 55%,#0a150a 100%);overflow:hidden;flex-direction:column">
+  <!-- top bar -->
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 36px;border-bottom:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.25);backdrop-filter:blur(14px);flex-shrink:0">
+    <div style="display:flex;align-items:center;gap:14px">
+      <span id="modal-icon" style="font-size:28px">📋</span>
+      <div>
+        <div id="modal-title" style="font-size:17px;font-weight:800;color:#e8edf5"></div>
+        <div id="modal-sub" style="font-size:12px;color:#8b9ab5;margin-top:2px"></div>
+      </div>
+    </div>
+    <button onclick="closeModal()" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:#e8edf5;font-size:20px;width:40px;height:40px;border-radius:50%;cursor:pointer">✕</button>
+  </div>
+  <!-- body -->
+  <div id="modal-body" style="flex:1;overflow:hidden;padding:28px 36px;display:flex;align-items:stretch"></div>
+  <!-- footer -->
+  <div style="padding:16px 40px;border-top:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.25);backdrop-filter:blur(14px);display:flex;justify-content:flex-end;gap:12px;flex-shrink:0">
+    <button onclick="closeModal()" style="padding:12px 28px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#e8edf5">Cancel</button>
+    <button onclick="submitModal()" style="padding:12px 36px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;border:none;background:linear-gradient(135deg,#82c906,#6aab00);color:#fff;box-shadow:0 4px 20px rgba(130,201,6,.35)">💾 Save</button>
+  </div>
+</div>
+
+<!-- IMPORT MODAL -->
+<div class="overlay" id="import-overlay" onclick="if(event.target===this)closeImport()">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="import-title">📂 Import from Excel / CSV</h3>
+      <button class="close-btn" onclick="closeImport()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div id="import-hint" style="background:#f0fff4;border:1px solid #c6f6d5;border-radius:8px;padding:14px;margin-bottom:16px;font-size:13px;color:#276749"></div>
+      <div id="drop-zone" style="border:2.5px dashed #82c906;border-radius:12px;padding:40px;text-align:center;cursor:pointer;background:#f9fff4;transition:background .2s"
+        onclick="document.getElementById('file-input').click()"
+        ondragover="event.preventDefault();this.style.background='#f0fff4'"
+        ondragleave="this.style.background='#f9fff4'"
+        ondrop="handleDrop(event)">
+        <div style="font-size:36px;margin-bottom:8px">📄</div>
+        <p style="font-size:14px;font-weight:600;color:#276749">Click to choose file or drag & drop here</p>
+        <p style="font-size:12px;color:#999;margin-top:4px">Supports .xlsx, .xls, .csv</p>
+        <input type="file" id="file-input" accept=".xlsx,.xls,.csv" style="display:none" onchange="previewImport(this.files[0])"/>
+      </div>
+      <div id="import-preview" style="margin-top:16px"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" style="background:#e2e8f0" onclick="closeImport()">Cancel</button>
+      <button class="btn btn-green" id="import-btn" onclick="runImport()" disabled style="opacity:.5">Import</button>
+    </div>
+  </div>
+</div>
+
+<!-- SUCCESS MODAL (shows ID + QR) -->
+<div class="overlay" id="result-overlay" onclick="if(event.target===this)closeResult()">
+  <div class="modal">
+    <div class="modal-header"><h3>✅ Added Successfully</h3><button class="close-btn" onclick="closeResult()">✕</button></div>
+    <div class="modal-body" id="result-body"></div>
+    <div class="modal-footer"><button class="btn btn-green" onclick="closeResult()">Done</button></div>
+  </div>
+</div>
+
+<script>
+const API = '/api/sms'
+let currentModal = null
+let editId = null
+let classesCache = []
+let parentsCache = []
+let teachersCache = []
+
+// ── TABS ──
+function showTab(name) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'))
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'))
+  document.getElementById('tab-' + name).classList.add('active')
+  event.currentTarget.classList.add('active')
+  loadTab(name)
+}
+
+function loadTab(name) {
+  if (name === 'dashboard')  { loadStats(); loadDashNotices() }
+  if (name === 'students')   loadStudents()
+  if (name === 'teachers')   loadTeachers()
+  if (name === 'parents')    loadParents()
+  if (name === 'people')     loadPeople()
+  if (name === 'staff')      loadStaff()
+  if (name === 'classes')    loadClasses()
+  if (name === 'checkin')    loadCheckins()
+  if (name === 'subjects')   initSubjects()
+  if (name === 'scores')     initScores()
+  if (name === 'fees')       initFees()
+  if (name === 'notices')    loadNotices()
+  if (name === 'receipts')   loadReceipts()
+}
+
+// ── STATS ──
+async function loadStats() {
+  const d = await fetch(API + '/stats').then(r => r.json())
+  document.getElementById('st-students').textContent  = d.students
+  document.getElementById('st-teachers').textContent  = d.teachers
+  document.getElementById('st-parents').textContent   = d.parents
+  document.getElementById('st-staff').textContent     = d.staff
+  document.getElementById('st-classes').textContent   = d.classes
+  document.getElementById('st-checkins').textContent  = d.checkins_today
+}
+
+async function loadDashNotices() {
+  const notices = await fetch(API + '/notices').then(r => r.json())
+  const el = document.getElementById('dash-notices')
+  if (!notices.length) { el.innerHTML = '<p style="padding:16px 0;color:#999">No notices yet.</p>'; return }
+  el.innerHTML = notices.slice(0,5).map(n => `
+    <div class="notice-item">
+      <div class="nt">${n.title}<span class="audience-tag">${n.audience}</span></div>
+      <div class="nb">${n.body}</div>
+      <div class="nm">${new Date(n.created_at).toLocaleString()}</div>
+    </div>`).join('')
+}
+
+// ── STUDENTS ──
+async function loadStudents() {
+  classesCache = await fetch(API + '/classes').then(r => r.json())
+  parentsCache = await fetch(API + '/parents').then(r => r.json())
+  const rows = await fetch(API + '/students').then(r => r.json())
+  document.getElementById('students-body').innerHTML = rows.length ? rows.map(s => {
+    const age = s.dob ? calcAge(s.dob) : '—'
+    const admitted = s.admission_date ? new Date(s.admission_date).toLocaleDateString('en-GB') : '—'
+    const photoHtml = s.photo
+      ? `<img src="${s.photo}" style="width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid var(--green)"/>`
+      : `<div style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:18px">👤</div>`
+    const needsBadge = s.special_needs
+      ? `<span style="font-size:10px;color:#fbbf24;background:rgba(251,191,36,.1);padding:2px 7px;border-radius:8px;border:1px solid rgba(251,191,36,.22)">${s.special_needs}</span>`
+      : '<span style="color:#555">—</span>'
+    return `<tr>
+      <td>${photoHtml}</td>
+      <td><span class="badge badge-blue">${s.student_id}</span></td>
+      <td style="font-weight:600">${s.name}</td>
+      <td style="color:var(--green);font-weight:700">${age}</td>
+      <td>${s.gender||'—'}</td>
+      <td>${s.class_name||'—'}</td>
+      <td style="font-size:12px">${admitted}</td>
+      <td>${s.parent_name||'—'}</td>
+      <td>${needsBadge}</td>
+      <td>
+        <button class="btn btn-blue btn-sm" onclick='editStudent(${JSON.stringify(s)})'>Edit</button>
+        <button class="btn btn-red btn-sm" onclick="deleteRecord('students',${s.id},'students-body',loadStudents)">Del</button>
+      </td>
+    </tr>`
+  }).join('') : '<tr><td colspan="10" style="text-align:center;color:#999;padding:20px">No students yet.</td></tr>'
+}
+
+function editStudent(s) {
+  editId = s.id
+  openModal('student', s)
+}
+
+// ── PEOPLE (Teachers + Parents combined view) ──
+async function loadPeople() {
+  const [teachers, parents] = await Promise.all([
+    fetch(API + '/teachers').then(r => r.json()),
+    fetch(API + '/parents').then(r => r.json())
+  ])
+  document.getElementById('people-teachers-body').innerHTML = teachers.length
+    ? teachers.map(t => `<tr>
+        <td style="font-size:12px;color:var(--muted)">${t.teacher_id}</td>
+        <td style="font-weight:700">${t.name}</td>
+        <td>${t.phone||'—'}</td>
+        <td>${t.email||'—'}</td>
+        <td>${t.qualification||'—'}</td>
+        <td>
+          <button class="btn btn-sm btn-blue" onclick='openModal("teacher",${JSON.stringify(t)})'>Edit</button>
+          <button class="btn btn-sm btn-red" onclick="deleteRecord('teachers',${t.id})">Del</button>
+        </td>
+      </tr>`).join('')
+    : '<tr><td colspan="6" style="text-align:center;color:#999;padding:20px">No teachers yet.</td></tr>'
+
+  document.getElementById('people-parents-body').innerHTML = parents.length
+    ? parents.map(p => `<tr>
+        <td style="font-size:12px;color:var(--muted)">${p.parent_id}</td>
+        <td style="font-weight:700">${p.name}</td>
+        <td>${p.phone||'—'}</td>
+        <td style="font-size:12px">${p.children||'—'}</td>
+        <td>
+          <button class="btn btn-sm btn-blue" onclick='openModal("parent",${JSON.stringify(p)})'>Edit</button>
+          <button class="btn btn-sm btn-red" onclick="deleteRecord('parents',${p.id})">Del</button>
+        </td>
+      </tr>`).join('')
+    : '<tr><td colspan="5" style="text-align:center;color:#999;padding:20px">No parents yet.</td></tr>'
+}
+
+// ── TEACHERS ──
+async function loadTeachers() {
+  const rows = await fetch(API + '/teachers').then(r => r.json())
+  teachersCache = rows
+  document.getElementById('teachers-body').innerHTML = rows.length ? rows.map(t => `
+    <tr>
+      <td><span class="badge badge-green">${t.teacher_id}</span></td>
+      <td>${t.name}</td>
+      <td>${t.phone||'—'}</td>
+      <td>${t.email||'—'}</td>
+      <td>${t.qualification||'—'}</td>
+      <td>
+        <button class="btn btn-blue btn-sm" onclick='editTeacher(${JSON.stringify(t)})'>Edit</button>
+        <button class="btn btn-red btn-sm" onclick="deleteRecord('teachers',${t.id},'teachers-body',loadTeachers)">Del</button>
+      </td>
+    </tr>`).join('') : '<tr><td colspan="6" style="text-align:center;color:#999;padding:20px">No teachers yet.</td></tr>'
+}
+
+function editTeacher(t) { editId = t.id; openModal('teacher', t) }
+
+// ── PARENTS ──
+async function loadParents() {
+  const rows = await fetch(API + '/parents').then(r => r.json())
+  parentsCache = rows
+  document.getElementById('parents-body').innerHTML = rows.length ? rows.map(p => `
+    <tr>
+      <td><span class="badge badge-yellow">${p.parent_id}</span></td>
+      <td>${p.name}</td>
+      <td>${p.phone||'—'}</td>
+      <td>${p.children||'—'}</td>
+      <td><button class="btn btn-sm" style="background:#e2e8f0" onclick="showQR('${p.parent_id}','${p.name}','${p.qr_code}')">QR</button></td>
+      <td>
+        <button class="btn btn-blue btn-sm" onclick='editParent(${JSON.stringify(p)})'>Edit</button>
+        <button class="btn btn-red btn-sm" onclick="deleteRecord('parents',${p.id},'parents-body',loadParents)">Del</button>
+      </td>
+    </tr>`).join('') : '<tr><td colspan="6" style="text-align:center;color:#999;padding:20px">No parents yet.</td></tr>'
+}
+
+function editParent(p) { editId = p.id; openModal('parent', p) }
+
+function showQR(id, name, qr) {
+  document.getElementById('result-body').innerHTML = `
+    <div class="qr-box">
+      <p style="font-size:14px;margin-bottom:12px"><strong>${name}</strong></p>
+      <img src="${qr}" alt="QR Code"/>
+      <div class="id-badge">${id}</div>
+      <p style="font-size:12px;color:#999;margin-top:8px">Show this QR for student check-in/out</p>
+    </div>`
+  document.getElementById('result-overlay').classList.add('show')
+}
+
+// ── STAFF ──
+async function loadStaff() {
+  const rows = await fetch(API + '/staff').then(r => r.json())
+  document.getElementById('staff-body').innerHTML = rows.length ? rows.map(s => `
+    <tr>
+      <td><span class="badge badge-blue">${s.staff_id}</span></td>
+      <td>${s.name}</td>
+      <td>${s.role}</td>
+      <td>${s.department||'—'}</td>
+      <td>${s.phone||'—'}</td>
+      <td>
+        <button class="btn btn-blue btn-sm" onclick='editStaff(${JSON.stringify(s)})'>Edit</button>
+        <button class="btn btn-red btn-sm" onclick="deleteRecord('staff',${s.id},'staff-body',loadStaff)">Del</button>
+      </td>
+    </tr>`).join('') : '<tr><td colspan="6" style="text-align:center;color:#999;padding:20px">No staff yet.</td></tr>'
+}
+
+function editStaff(s) { editId = s.id; openModal('staff', s) }
+
+// ── CLASSES ──
+async function loadClasses() {
+  teachersCache = await fetch(API + '/teachers').then(r => r.json())
+  const rows = await fetch(API + '/classes').then(r => r.json())
+  classesCache = rows
+  document.getElementById('classes-body').innerHTML = rows.length ? rows.map(c => `
+    <tr>
+      <td>${c.name}</td>
+      <td>${c.level}</td>
+      <td>${c.section}</td>
+      <td>${c.teacher_name||'—'}</td>
+      <td><span class="badge badge-green">${c.student_count}</span></td>
+      <td>
+        <button class="btn btn-blue btn-sm" onclick='editClass(${JSON.stringify(c)})'>Edit</button>
+        <button class="btn btn-red btn-sm" onclick="deleteRecord('classes',${c.id},'classes-body',loadClasses)">Del</button>
+      </td>
+    </tr>`).join('') : '<tr><td colspan="6" style="text-align:center;color:#999;padding:20px">No classes yet.</td></tr>'
+}
+
+function editClass(c) { editId = c.id; openModal('class', c) }
+
+// ── CHECK-IN ──
+async function loadCheckins() {
+  const rows = await fetch(API + '/checkins').then(r => r.json())
+  document.getElementById('checkins-body').innerHTML = rows.length ? rows.map(c => `
+    <tr>
+      <td>${new Date(c.time).toLocaleTimeString()}</td>
+      <td>${c.student_name}</td>
+      <td>${c.student_id}</td>
+      <td>${c.class_name||'—'}</td>
+      <td><span class="badge ${c.type==='in'?'badge-green':'badge-yellow'}">${c.type.toUpperCase()}</span></td>
+    </tr>`).join('') : '<tr><td colspan="5" style="text-align:center;color:#999;padding:20px">No check-ins today.</td></tr>'
+}
+
+async function doCheckin(type) {
+  const id = document.getElementById('checkin-id').value.trim()
+  if (!id) return
+  const r = await fetch(API + '/checkin', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ student_id: id, type }) }).then(r => r.json())
+  const msg = document.getElementById('checkin-msg')
+  if (r.success) {
+    msg.style.color = '#276749'
+    msg.textContent = `✅ ${r.student} checked ${type} successfully.`
+    document.getElementById('checkin-id').value = ''
+    loadCheckins()
+  } else {
+    msg.style.color = '#e53e3e'
+    msg.textContent = '❌ Student not found. Check the ID.'
+  }
+}
+
+// ── NOTICES ──
+async function loadNotices() {
+  const rows = await fetch(API + '/notices').then(r => r.json())
+  const el = document.getElementById('notices-list')
+  if (!rows.length) { el.innerHTML = '<p style="padding:16px 0;color:#999">No notices yet.</p>'; return }
+  el.innerHTML = rows.map(n => `
+    <div class="notice-item">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div class="nt">${n.title}<span class="audience-tag">${n.audience}</span></div>
+        <button class="btn btn-red btn-sm" onclick="deleteNotice(${n.id})">Delete</button>
+      </div>
+      <div class="nb">${n.body}</div>
+      <div class="nm">${new Date(n.created_at).toLocaleString()}</div>
+    </div>`).join('')
+}
+
+async function deleteNotice(id) {
+  if (!confirm('Delete this notice?')) return
+  await fetch(API + '/notices/' + id, { method:'DELETE' })
+  loadNotices()
+}
+
+// ── MODAL ──
+var modalMeta = {
+  student: { icon:'🎒', sub:'Student personal and academic details' },
+  teacher: { icon:'👩‍🏫', sub:'Teacher profile and contact information' },
+  parent:  { icon:'👨‍👩‍👧', sub:'Parent or guardian information' },
+  staff:   { icon:'👷', sub:'Staff member details and role' },
+  class:   { icon:'🏫', sub:'Class name, level and assigned teacher' },
+  subject: { icon:'📚', sub:'Subject details and assigned teacher' },
+  fee:     { icon:'💰', sub:'Fee entry for a student' },
+  notice:  { icon:'📢', sub:'School-wide notice or announcement' },
+}
+
+function openModal(type, data = null) {
+  currentModal = type
+  editId = data ? data.id : null
+  var m = modalMeta[type] || { icon:'📋', sub:'' }
+  document.getElementById('modal-icon').textContent  = m.icon
+  document.getElementById('modal-title').textContent = (data ? 'Edit ' : 'Add ') + type.charAt(0).toUpperCase() + type.slice(1)
+  document.getElementById('modal-sub').textContent   = m.sub
+  document.getElementById('modal-body').innerHTML    = buildForm(type, data)
+  var ov = document.getElementById('modal-overlay')
+  ov.style.display = 'flex'
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').style.display = 'none'
+  currentModal = null; editId = null
+}
+
+function closeResult() {
+  document.getElementById('result-overlay').classList.remove('show')
+}
+
+function buildForm(type, d) {
+  if (type === 'student') {
+    const classOpts = classesCache.map(c => `<option value="${c.id}" ${d&&d.class_id==c.id?'selected':''}>${c.name}</option>`).join('')
+    const parentOpts = parentsCache.map(p => `<option value="${p.id}" ${d&&d.parent_id==p.id?'selected':''}>${p.name}</option>`).join('')
+    const existingNeeds = d && d.special_needs ? d.special_needs.split(',').map(s=>s.trim()) : []
+    const needsOptions = ['Eye / Visual','Hearing','Speech','Arm / Upper Limb','Leg / Lower Limb','Chronic Skin Condition','Other Illness']
+    const needsCheckboxes = needsOptions.map(n => {
+      const checked = existingNeeds.includes(n) ? 'checked' : ''
+      return `<label style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;margin-bottom:6px">
+        <input type="checkbox" class="sn-check" value="${n}" ${checked} style="width:16px;height:16px;accent-color:var(--green)"/> ${n}
+      </label>`
+    }).join('')
+    const currentPhoto = d && d.photo
+      ? `<img src="${d.photo}" style="width:110px;height:110px;border-radius:50%;object-fit:cover;border:3px solid var(--green)"/>`
+      : `<div style="width:110px;height:110px;border-radius:50%;background:rgba(255,255,255,.07);border:2px dashed rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:40px">👤</div>`
+    return `<div style="display:grid;grid-template-columns:180px 1fr 1fr;gap:28px;width:100%;height:100%">
+
+      <!-- COL 1: photo + special needs -->
+      <div style="display:flex;flex-direction:column;gap:18px">
+        <div style="text-align:center">
+          <div id="photo-preview" style="display:flex;justify-content:center;margin-bottom:10px">${currentPhoto}</div>
+          <input type="file" id="f-photo" accept="image/*" style="display:none" onchange="previewPhoto(this)"/>
+          <button type="button" class="btn btn-blue btn-sm" style="width:100%" onclick="document.getElementById('f-photo').click()">📷 ${d&&d.photo?'Change Photo':'Upload Photo'}</button>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px">Special Needs</div>
+          <div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:12px">
+            ${needsCheckboxes}
+          </div>
+          <div style="font-size:10px;color:var(--muted);margin-top:6px">Kept confidential</div>
+        </div>
+      </div>
+
+      <!-- COL 2: personal info -->
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="font-size:11px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px">Personal Information</div>
+        <div class="form-group" style="margin:0"><label>Full Name *</label><input id="f-name" value="${d?d.name:''}" placeholder="Student's full name"/></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="form-group" style="margin:0"><label>Date of Birth</label><input id="f-dob" type="date" value="${d?d.dob||'':''}" oninput="updateAge(this.value)"/></div>
+          <div class="form-group" style="margin:0"><label>Age</label><input id="f-age" value="${d&&d.dob?calcAge(d.dob):''}" placeholder="Auto" readonly style="background:rgba(255,255,255,.03);color:var(--green);font-weight:700"/></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="form-group" style="margin:0"><label>Gender</label><select id="f-gender"><option value="">Select</option><option ${d&&d.gender==='Male'?'selected':''}>Male</option><option ${d&&d.gender==='Female'?'selected':''}>Female</option></select></div>
+          <div class="form-group" style="margin:0"><label>Date of Admission</label><input id="f-admission" type="date" value="${d?d.admission_date||'':''}"/></div>
+        </div>
+        <div class="form-group" style="margin:0"><label>Home Address</label><input id="f-address" value="${d?d.address||'':''}" placeholder="Home address"/></div>
+      </div>
+
+      <!-- COL 3: academic + parent -->
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="font-size:11px;font-weight:800;color:var(--blue);text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px">Academic &amp; Parent</div>
+        <div class="form-group" style="margin:0"><label>Class</label><select id="f-class"><option value="">Select class</option>${classOpts}</select></div>
+        <div class="form-group" style="margin:0">
+          <label>Parent / Guardian</label>
+          <div style="display:flex;gap:8px;align-items:center">
+            <select id="f-parent" style="flex:1"><option value="">Select existing parent</option>${parentOpts}</select>
+            <button type="button" class="btn btn-blue btn-sm" onclick="toggleNewParentForm()" style="white-space:nowrap;flex-shrink:0;padding:10px 12px">+ New</button>
+          </div>
+        </div>
+      </div>
+    </div>`
+  }
+  if (type === 'teacher') return `<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;width:100%">
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div style="font-size:11px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:.07em">Personal Info</div>
+      <div class="form-group" style="margin:0"><label>Full Name *</label><input id="f-name" value="${d?d.name:''}" placeholder="Teacher's full name"/></div>
+      <div class="form-group" style="margin:0"><label>Phone</label><input id="f-phone" value="${d?d.phone||'':''}" placeholder="+233..."/></div>
+      <div class="form-group" style="margin:0"><label>Email</label><input id="f-email" type="email" value="${d?d.email||'':''}" placeholder="email@school.edu.gh"/></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div style="font-size:11px;font-weight:800;color:var(--blue);text-transform:uppercase;letter-spacing:.07em">Professional Info</div>
+      <div class="form-group" style="margin:0"><label>Qualification</label><input id="f-qual" value="${d?d.qualification||'':''}" placeholder="e.g. B.Ed, M.Ed"/></div>
+      <div class="form-group" style="margin:0"><label>Subjects (comma-separated)</label><input id="f-subjects" value="${d&&d.subjects?JSON.parse(d.subjects).join(', '):''}" placeholder="Maths, Science, English"/></div>
+    </div>
+  </div>`
+  if (type === 'parent') return `<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;width:100%">
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div style="font-size:11px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:.07em">Contact Details</div>
+      <div class="form-group" style="margin:0"><label>Full Name *</label><input id="f-name" value="${d?d.name:''}" placeholder="Parent's full name"/></div>
+      <div class="form-group" style="margin:0"><label>Phone *</label><input id="f-phone" value="${d?d.phone||'':''}" placeholder="+233..."/></div>
+      <div class="form-group" style="margin:0"><label>Email</label><input id="f-email" type="email" value="${d?d.email||'':''}" placeholder="email@example.com"/></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div style="font-size:11px;font-weight:800;color:var(--blue);text-transform:uppercase;letter-spacing:.07em">Additional Info</div>
+      <div class="form-group" style="margin:0"><label>Occupation</label><input id="f-occupation" value="${d?d.occupation||'':''}" placeholder="e.g. Nurse, Engineer"/></div>
+      <div class="form-group" style="margin:0"><label>Home Address</label><input id="f-address" value="${d?d.address||'':''}" placeholder="Home address"/></div>
+    </div>
+  </div>`
+  if (type === 'staff') return `<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;width:100%">
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div style="font-size:11px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:.07em">Personal Info</div>
+      <div class="form-group" style="margin:0"><label>Full Name *</label><input id="f-name" value="${d?d.name:''}" placeholder="Staff member name"/></div>
+      <div class="form-group" style="margin:0"><label>Phone</label><input id="f-phone" value="${d?d.phone||'':''}" placeholder="+233..."/></div>
+      <div class="form-group" style="margin:0"><label>Email</label><input id="f-email" type="email" value="${d?d.email||'':''}" placeholder="email@school.edu.gh"/></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div style="font-size:11px;font-weight:800;color:var(--blue);text-transform:uppercase;letter-spacing:.07em">Role &amp; Department</div>
+      <div class="form-group" style="margin:0"><label>Role *</label><select id="f-role"><option value="">Select role</option>${['Accountant','Secretary','Librarian','Security','Cleaner','Driver','Nurse','IT Officer','Other'].map(r=>`<option ${d&&d.role===r?'selected':''}>${r}</option>`).join('')}</select></div>
+      <div class="form-group" style="margin:0"><label>Department</label><input id="f-dept" value="${d?d.department||'':''}" placeholder="e.g. Finance, Administration"/></div>
+    </div>
+  </div>`
+  if (type === 'class') {
+    const teacherOpts = teachersCache.map(t => `<option value="${t.id}" ${d&&d.teacher_id==t.id?'selected':''}>${t.name}</option>`).join('')
+    return `<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;width:100%">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="font-size:11px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:.07em">Class Identity</div>
+        <div class="form-group" style="margin:0"><label>Class Name *</label><input id="f-name" value="${d?d.name:''}" placeholder="e.g. Primary 1A"/></div>
+        <div class="form-group" style="margin:0"><label>Level *</label><input id="f-level" value="${d?d.level:''}" placeholder="e.g. Primary 1"/></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="font-size:11px;font-weight:800;color:var(--blue);text-transform:uppercase;letter-spacing:.07em">Assignment</div>
+        <div class="form-group" style="margin:0"><label>Section</label><select id="f-section"><option ${d&&d.section==='A'?'selected':''}>A</option><option ${d&&d.section==='B'?'selected':''}>B</option><option ${d&&d.section==='C'?'selected':''}>C</option></select></div>
+        <div class="form-group" style="margin:0"><label>Class Teacher</label><select id="f-teacher"><option value="">None</option>${teacherOpts}</select></div>
+      </div>
+    </div>`
+  }
+  if (type === 'notice') return `<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;width:100%">
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div style="font-size:11px;font-weight:800;color:var(--amber);text-transform:uppercase;letter-spacing:.07em">Notice Content</div>
+      <div class="form-group" style="margin:0"><label>Title *</label><input id="f-title" value="${d?d.title||'':''}" placeholder="Notice title"/></div>
+      <div class="form-group" style="flex:1;margin:0"><label>Message *</label><textarea id="f-body" style="height:160px;resize:none" placeholder="Type the notice message here...">${d?d.body||'':''}</textarea></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div style="font-size:11px;font-weight:800;color:var(--blue);text-transform:uppercase;letter-spacing:.07em">Distribution</div>
+      <div class="form-group" style="margin:0"><label>Audience</label><select id="f-audience"><option value="all" ${d&&d.audience==='all'?'selected':''}>Everyone</option><option value="parents" ${d&&d.audience==='parents'?'selected':''}>Parents</option><option value="teachers" ${d&&d.audience==='teachers'?'selected':''}>Teachers</option><option value="students" ${d&&d.audience==='students'?'selected':''}>Students</option><option value="staff" ${d&&d.audience==='staff'?'selected':''}>Staff</option></select></div>
+      <div style="background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);border-radius:10px;padding:14px;font-size:13px;color:var(--muted)">📢 This notice will be visible to the selected audience in the school portal.</div>
+    </div>
+  </div>`
+  return ''
+}
+
+async function submitModal() {
+  const type = currentModal
+  let body = {}
+  let url = API + '/' + (type === 'class' ? 'classes' : type === 'notice' ? 'notices' : type + 's')
+  let method = editId ? 'PUT' : 'POST'
+  if (editId) url += '/' + editId
+
+  if (type === 'student') {
+    const checkedNeeds = Array.from(document.querySelectorAll('.sn-check:checked')).map(cb => cb.value)
+    const photoFile = document.getElementById('f-photo') && document.getElementById('f-photo').files[0]
+    const fd = new FormData()
+    fd.append('name', v('f-name'))
+    fd.append('dob', v('f-dob'))
+    fd.append('gender', v('f-gender'))
+    fd.append('class_id', v('f-class'))
+    fd.append('parent_id', v('f-parent'))
+    fd.append('address', v('f-address'))
+    fd.append('admission_date', v('f-admission'))
+    fd.append('special_needs', checkedNeeds.join(', '))
+    if (photoFile) fd.append('photo', photoFile)
+    try {
+      const r = await fetch(url, { method, body: fd })
+      const data = await r.json()
+      if (!data.success && !data.student_id) { alert(data.error || 'Error saving'); return }
+      closeModal(); loadStudents()
+    } catch(e) { alert('Error saving student') }
+    return
+  } else if (type === 'teacher') {
+    body = { name: v('f-name'), phone: v('f-phone'), email: v('f-email'), qualification: v('f-qual'), subjects: v('f-subjects').split(',').map(s=>s.trim()).filter(Boolean) }
+  } else if (type === 'parent') {
+    body = { name: v('f-name'), phone: v('f-phone'), email: v('f-email'), address: v('f-address') }
+  } else if (type === 'staff') {
+    body = { name: v('f-name'), role: v('f-role'), department: v('f-dept'), phone: v('f-phone'), email: v('f-email') }
+  } else if (type === 'class') {
+    body = { name: v('f-name'), level: v('f-level'), section: v('f-section'), teacher_id: v('f-teacher') }
+  } else if (type === 'notice') {
+    body = { title: v('f-title'), body: v('f-body'), audience: v('f-audience') }
+  }
+
+  const res = await fetch(url, { method, headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) }).then(r => r.json())
+  if (res.error) { alert('Error: ' + res.error); return }
+  closeModal()
+
+  // Show ID + QR for new parents/teachers/students
+  if (!editId && (type === 'parent' || type === 'teacher' || type === 'student')) {
+    const id = res.parent_id || res.teacher_id || res.student_id
+    let html = `<div class="qr-box"><div class="id-badge">${id}</div><p style="font-size:13px;color:#555;margin-top:12px">Save this ID — it is the login credential.</p>`
+    if (res.qr_code) html += `<br/><img src="${res.qr_code}" style="width:160px;height:160px;margin-top:8px" alt="QR Code"/><p style="font-size:12px;color:#999;margin-top:4px">Parent QR for student check-in/out</p>`
+    html += '</div>'
+    document.getElementById('result-body').innerHTML = html
+    document.getElementById('result-overlay').classList.add('show')
+  }
+
+  loadTab(type === 'class' ? 'classes' : type === 'notice' ? 'notices' : type + 's')
+}
+
+function v(id) { const el = document.getElementById(id); return el ? el.value : '' }
+
+function calcAge(dob) {
+  if (!dob) return ''
+  const today = new Date(), birth = new Date(dob)
+  let age = today.getFullYear() - birth.getFullYear()
+  if (today.getMonth() < birth.getMonth() || (today.getMonth() === birth.getMonth() && today.getDate() < birth.getDate())) age--
+  return age + ' yrs'
+}
+
+function updateAge(dob) {
+  const el = document.getElementById('f-age')
+  if (el) el.value = calcAge(dob)
+}
+
+var npMode = 'both'
+
+function toggleNewParentForm() {
+  var el = document.getElementById('add-parent-overlay')
+  if (!el) return
+  if (el.style.display === 'none') {
+    el.style.display = 'block'
+    setParentMode('both')
+    // Clear fields
+    ;['np-mname','np-mphone','np-memail','np-mocc','np-maddress','np-fname','np-fphone','np-femail','np-focc','np-faddress'].forEach(function(id){
+      var f = document.getElementById(id); if(f) f.value = ''
+    })
+    var msg = document.getElementById('np-msg'); if(msg) msg.textContent = ''
+  } else {
+    el.style.display = 'none'
+  }
+}
+
+function setParentMode(mode) {
+  npMode = mode
+  var mc = document.getElementById('np-mother-col')
+  var fc = document.getElementById('np-father-col')
+  var cols = document.getElementById('np-columns')
+  if (!mc || !fc) return
+  if (mode === 'both') {
+    mc.style.display = 'block'; fc.style.display = 'block'
+    cols.style.gridTemplateColumns = '1fr 1fr'
+  } else if (mode === 'mother') {
+    mc.style.display = 'block'; fc.style.display = 'none'
+    cols.style.gridTemplateColumns = '1fr'
+  } else {
+    mc.style.display = 'none'; fc.style.display = 'block'
+    cols.style.gridTemplateColumns = '1fr'
+  }
+  ;['both','mother','father'].forEach(function(b) {
+    var btn = document.getElementById('np-opt-' + b)
+    if (!btn) return
+    if (b === mode) {
+      btn.style.background = 'rgba(56,189,248,.15)'; btn.style.borderColor = 'rgba(56,189,248,.45)'; btn.style.color = '#38bdf8'
+    } else {
+      btn.style.background = 'transparent'; btn.style.borderColor = 'rgba(255,255,255,.1)'; btn.style.color = '#8b9ab5'
+    }
+  })
+}
+
+function g(id) { var e = document.getElementById(id); return e ? e.value.trim() : '' }
+
+async function saveNewParent() {
+  var msg = document.getElementById('np-msg')
+  function setMsg(t, c) { if(msg) { msg.textContent = t; msg.style.color = c } }
+
+  async function createParent(name, phone, email, address, occ) {
+    if (!name || !phone) return null
+    const r = await fetch(API + '/parents', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, phone, email, address, occupation: occ })
+    })
+    return await r.json()
+  }
+
+  setMsg('Saving…', 'var(--muted)')
+  try {
+    var lastId = null
+    if (npMode === 'mother' || npMode === 'both') {
+      if (!g('np-mname') || !g('np-mphone')) { setMsg('⚠ Mother name and phone required', '#f87171'); return }
+      const d = await createParent(g('np-mname'), g('np-mphone'), g('np-memail'), g('np-maddress'), g('np-mocc'))
+      if (!d || !d.success) { setMsg('✗ ' + (d&&d.error||'Error saving mother'), '#f87171'); return }
+      lastId = d.id
+    }
+    if (npMode === 'father' || npMode === 'both') {
+      if (!g('np-fname') || !g('np-fphone')) { setMsg('⚠ Father name and phone required', '#f87171'); return }
+      const d = await createParent(g('np-fname'), g('np-fphone'), g('np-femail'), g('np-faddress'), g('np-focc'))
+      if (!d || !d.success) { setMsg('✗ ' + (d&&d.error||'Error saving father'), '#f87171'); return }
+      lastId = d.id
+    }
+    // Reload dropdown
+    parentsCache = await fetch(API + '/parents').then(r => r.json())
+    const sel = document.getElementById('f-parent')
+    if (sel) {
+      sel.innerHTML = '<option value="">Select existing parent</option>' + parentsCache.map(p => '<option value="' + p.id + '">' + p.name + ' — ' + (p.phone||'') + '</option>').join('')
+      if (lastId) sel.value = lastId
+    }
+    const saved = npMode === 'both' ? 'Mother &amp; Father saved!' : (npMode === 'mother' ? 'Mother saved!' : 'Father saved!')
+    setMsg('✓ ' + saved, '#34d399')
+    setTimeout(toggleNewParentForm, 1400)
+  } catch(e) { setMsg('✗ Failed to save', '#f87171') }
+}
+
+function previewPhoto(input) {
+  if (!input.files || !input.files[0]) return
+  const reader = new FileReader()
+  reader.onload = function(e) {
+    document.getElementById('photo-preview').innerHTML = '<img src="' + e.target.result + '" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:2px solid var(--green)"/>'
+  }
+  reader.readAsDataURL(input.files[0])
+}
+
+async function deleteRecord(entity, id, bodyId, reloadFn) {
+  if (!confirm('Are you sure you want to remove this record?')) return
+  await fetch(API + '/' + entity + '/' + id, { method:'DELETE' })
+  reloadFn()
+}
+
+function filterTable(tableId, query) {
+  const q = query.toLowerCase()
+  document.querySelectorAll('#' + tableId + ' tbody tr').forEach(tr => {
+    tr.style.display = tr.textContent.toLowerCase().includes(q) ? '' : 'none'
+  })
+}
+
+// ── SUBJECTS ──
+let subjectsTeachersCache = []
+async function initSubjects() {
+  subjectsTeachersCache = await fetch(API + '/teachers').then(r => r.json())
+  const classes = await fetch(API + '/classes').then(r => r.json())
+  classesCache = classes
+  const sel = document.getElementById('subj-class-filter')
+  sel.innerHTML = '<option value="">All Classes</option>' + classes.map(c => `<option value="${c.id}">${c.name}</option>`).join('')
+  loadSubjects()
+}
+
+async function loadSubjects() {
+  const class_id = document.getElementById('subj-class-filter').value
+  const url = API.replace('/sms','') + '/scores/subjects' + (class_id ? '?class_id='+class_id : '')
+  const rows = await fetch(url).then(r => r.json())
+  document.getElementById('subjects-body').innerHTML = rows.length ? rows.map(s => `
+    <tr>
+      <td>${s.name}</td>
+      <td>${s.class_name||'—'}</td>
+      <td>${s.teacher_name||'—'}</td>
+      <td>
+        <button class="btn btn-red btn-sm" onclick="deleteSubject(${s.id})">Delete</button>
+      </td>
+    </tr>`).join('') : '<tr><td colspan="4" style="text-align:center;color:#999;padding:20px">No subjects yet.</td></tr>'
+}
+
+async function deleteSubject(id) {
+  if (!confirm('Delete this subject?')) return
+  await fetch('/api/scores/subjects/'+id, { method:'DELETE' })
+  loadSubjects()
+}
+
+// ── SCORES ──
+let scoreData = null
+async function initScores() {
+  const classes = await fetch(API + '/classes').then(r => r.json())
+  const sel = document.getElementById('score-class')
+  sel.innerHTML = '<option value="">Select class</option>' + classes.map(c => `<option value="${c.id}">${c.name}</option>`).join('')
+  const yr = document.getElementById('score-year')
+  const y = new Date().getFullYear()
+  yr.innerHTML = [y,y-1,y+1].map(n => `<option ${n===y?'selected':''}>${n}</option>`).join('')
+}
+
+async function loadScoreSheet() {
+  const class_id = document.getElementById('score-class').value
+  const term = document.getElementById('score-term').value
+  const year = document.getElementById('score-year').value
+  if (!class_id) return
+  const data = await fetch(`/api/scores/assessments?class_id=${class_id}&term=${encodeURIComponent(term)}&year=${year}`).then(r => r.json())
+  scoreData = { class_id, term, year, ...data }
+  renderScoreSheet(data, term, year)
+}
+
+function renderScoreSheet({ students, subjects }, term, year) {
+  const el = document.getElementById('score-sheet')
+  if (!subjects.length) {
+    el.innerHTML = '<p style="color:#e53e3e;font-size:14px;padding:12px 0">No subjects found for this class. Add subjects first in the Subjects tab.</p>'
+    return
+  }
+  if (!students.length) {
+    el.innerHTML = '<p style="color:#999;font-size:14px;padding:12px 0">No students in this class yet.</p>'
+    return
+  }
+
+  let html = `<p style="font-size:12px;color:#888;margin-bottom:10px">Class Score max: 30 | Exam Score max: 70. Click Save after entering scores.</p>
+  <table style="min-width:700px">
+    <thead><tr><th>Student</th>${subjects.map(s=>`<th colspan="2" style="text-align:center">${s.name}<br/><small style="font-weight:400;font-size:10px">Class / Exam</small></th>`).join('')}<th>Total</th><th>Pos</th><th>Report</th></tr></thead>
+    <tbody>`
+  students.forEach(st => {
+    html += `<tr><td style="font-weight:600">${st.name}<br/><small style="color:#999">${st.student_id}</small></td>`
+    subjects.forEach((sub,i) => {
+      const sc = st.scores[i]
+      html += `<td style="padding:6px 4px"><input type="number" min="0" max="30" step="0.5" value="${sc.class_score||0}" style="width:54px;padding:4px;border:1.5px solid #e2e8f0;border-radius:6px;font-size:13px" onchange="saveScore(${st.id},${sub.id},this,null)"/></td>
+               <td style="padding:6px 4px"><input type="number" min="0" max="70" step="0.5" value="${sc.exam_score||0}" style="width:54px;padding:4px;border:1.5px solid #e2e8f0;border-radius:6px;font-size:13px" onchange="saveScore(${st.id},${sub.id},null,this)"/></td>`
+    })
+    const g = st.scores[0]
+    html += `<td style="font-weight:700;color:#276749">${st.grand_total.toFixed(1)}</td>
+             <td><span class="badge badge-blue">${st.position||'—'}</span></td>
+             <td><a href="/api/fees/reportcard/${st.id}?term=${encodeURIComponent(scoreData.term)}&year=${scoreData.year}" target="_blank" class="btn btn-sm btn-green" style="text-decoration:none">PDF</a></td></tr>`
+  })
+  html += '</tbody></table>'
+  el.innerHTML = html
+}
+
+async function saveScore(student_id, subject_id, csEl, esEl) {
+  if (!scoreData) return
+  const row = document.querySelector(`input[onchange*="${student_id},${subject_id},this,null"]`)
+  const row2 = document.querySelector(`input[onchange*="${student_id},${subject_id},null,this"]`)
+  const class_score = csEl ? csEl.value : (row ? row.value : 0)
+  const exam_score  = esEl ? esEl.value : (row2 ? row2.value : 0)
+  await fetch('/api/scores/assessments', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ student_id, subject_id, term: scoreData.term, year: parseInt(scoreData.year), class_score: parseFloat(class_score), exam_score: parseFloat(exam_score) })
+  })
+  setTimeout(loadScoreSheet, 600)
+}
+
+// ── FEES ──
+async function initFees() {
+  const yr = document.getElementById('fee-year-filter')
+  const y = new Date().getFullYear()
+  yr.innerHTML = [y,y-1,y+1].map(n => `<option ${n===y?'selected':''}>${n}</option>`).join('')
+  if (!parentsCache.length) parentsCache = await fetch(API + '/parents').then(r => r.json())
+  const allStudents = await fetch(API + '/students').then(r => r.json())
+  window._allStudents = allStudents
+  loadFees()
+}
+
+async function loadFees() {
+  const term = document.getElementById('fee-term-filter').value
+  const year = document.getElementById('fee-year-filter').value
+  const rows = await fetch(`/api/fees?term=${encodeURIComponent(term)}&year=${year}`).then(r => r.json())
+  document.getElementById('fees-body').innerHTML = rows.length ? rows.map(f => `
+    <tr>
+      <td>${f.student_name}<br/><small style="color:#999">${f.sid}</small></td>
+      <td>${f.class_name||'—'}</td>
+      <td>${f.fee_type}</td>
+      <td>${f.term}</td>
+      <td style="font-weight:700">GH₵ ${parseFloat(f.amount).toFixed(2)}</td>
+      <td><span class="badge ${f.status==='paid'?'badge-green':'badge-yellow'}">${f.status.toUpperCase()}</span></td>
+      <td>${f.status==='paid' ? `<a href="/api/fees/${f.id}/receipt" target="_blank" class="btn btn-sm btn-green" style="text-decoration:none">📄 PDF</a>` : `<button class="btn btn-sm btn-green" onclick="markPaid(${f.id})">Mark Paid</button>`}</td>
+      <td><button class="btn btn-red btn-sm" onclick="deleteFee(${f.id})">Del</button></td>
+    </tr>`).join('') : '<tr><td colspan="8" style="text-align:center;color:#999;padding:20px">No fee records yet.</td></tr>'
+}
+
+async function markPaid(id) {
+  const r = await fetch('/api/fees/'+id+'/pay', { method:'POST' }).then(r => r.json())
+  if (r.receipt_no) alert('✅ Marked as paid. Receipt: ' + r.receipt_no)
+  loadFees()
+}
+
+async function deleteFee(id) {
+  if (!confirm('Delete this fee record?')) return
+  await fetch('/api/fees/'+id, { method:'DELETE' })
+  loadFees()
+}
+
+async function loadFeeSummary() {
+  const term = document.getElementById('fee-term-filter').value
+  const year = document.getElementById('fee-year-filter').value
+  const rows = await fetch(`/api/fees/summary?term=${encodeURIComponent(term)}&year=${year}`).then(r => r.json())
+  document.getElementById('fee-summary-card').style.display = 'block'
+  document.getElementById('fee-summary-body').innerHTML = rows.map(r => `
+    <tr>
+      <td>${r.student_name}</td>
+      <td>${r.sid}</td>
+      <td>${r.class_name||'—'}</td>
+      <td style="color:#276749;font-weight:700">GH₵ ${(r.paid||0).toFixed(2)}</td>
+      <td style="color:#e53e3e;font-weight:700">GH₵ ${(r.pending||0).toFixed(2)}</td>
+      <td style="font-weight:700">GH₵ ${(r.total||0).toFixed(2)}</td>
+    </tr>`).join('')
+}
+
+// ── EXTEND buildForm for subject + fee ──
+const _origBuildForm = buildForm
+window.buildForm = function(type, d) {
+  if (type === 'subject') {
+    const classOpts = classesCache.map(c => `<option value="${c.id}" ${d&&d.class_id==c.id?'selected':''}>${c.name}</option>`).join('')
+    const teacherOpts = subjectsTeachersCache.map(t => `<option value="${t.id}" ${d&&d.teacher_id==t.id?'selected':''}>${t.name}</option>`).join('')
+    return `
+      <div class="form-group"><label>Subject Name *</label><input id="f-name" value="${d?d.name:''}" placeholder="e.g. Mathematics"/></div>
+      <div class="form-row">
+        <div class="form-group"><label>Class</label><select id="f-class"><option value="">All / General</option>${classOpts}</select></div>
+        <div class="form-group"><label>Teacher</label><select id="f-teacher"><option value="">Unassigned</option>${teacherOpts}</select></div>
+      </div>`
+  }
+  if (type === 'fee') {
+    const students = (window._allStudents || [])
+    const studentOpts = students.map(s => `<option value="${s.id}">${s.name} (${s.student_id})</option>`).join('')
+    return `
+      <div class="form-group"><label>Student *</label><select id="f-student"><option value="">Select student</option>${studentOpts}</select></div>
+      <div class="form-row">
+        <div class="form-group"><label>Fee Type *</label><select id="f-fee-type">
+          ${['School Fees','Uniform','Books','Canteen','PTA','Exam Fees','Other'].map(t=>`<option>${t}</option>`).join('')}
+        </select></div>
+        <div class="form-group"><label>Amount (GH₵) *</label><input id="f-amount" type="number" min="0" step="0.01" placeholder="0.00"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Term *</label><select id="f-term"><option>Term 1</option><option>Term 2</option><option>Term 3</option></select></div>
+        <div class="form-group"><label>Year *</label><input id="f-year" type="number" value="${new Date().getFullYear()}"/></div>
+      </div>
+      <div class="form-group"><label>Note</label><input id="f-note" placeholder="Optional note"/></div>`
+  }
+  return _origBuildForm(type, d)
+}
+
+// ── EXTEND submitModal for subject + fee ──
+const _origSubmit = submitModal
+window.submitModal = async function() {
+  if (currentModal === 'subject') {
+    const body = { name: v('f-name'), class_id: v('f-class'), teacher_id: v('f-teacher') }
+    const res = await fetch('/api/scores/subjects' + (editId ? '/'+editId : ''), {
+      method: editId ? 'PUT' : 'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)
+    }).then(r => r.json())
+    if (res.error) { alert('Error: ' + res.error); return }
+    closeModal(); loadSubjects(); return
+  }
+  if (currentModal === 'fee') {
+    const body = { student_id: v('f-student'), fee_type: v('f-fee-type'), amount: v('f-amount'), term: v('f-term'), year: v('f-year'), note: v('f-note') }
+    const res = await fetch('/api/fees', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) }).then(r => r.json())
+    if (res.error) { alert('Error: ' + res.error); return }
+    closeModal(); loadFees(); return
+  }
+  return _origSubmit()
+}
+
+// ── IMPORT ──
+let importFile = null
+
+function handleDrop(e) {
+  e.preventDefault()
+  document.getElementById('drop-zone').style.background = '#f9fff4'
+  const file = e.dataTransfer.files[0]
+  if (file) previewImport(file)
+}
+
+function previewImport(file) {
+  if (!file) return
+  importFile = file
+  const el = document.getElementById('import-preview')
+  el.innerHTML = `<div style="background:#f7fafc;border-radius:8px;padding:12px;font-size:13px">
+    <strong>📄 ${file.name}</strong> &nbsp; <span style="color:#999">(${(file.size/1024).toFixed(1)} KB)</span>
+    <p style="color:#276749;margin-top:6px">File ready. Click <strong>Import Students</strong> to proceed.</p>
+  </div>`
+  const btn = document.getElementById('import-btn')
+  btn.disabled = false
+  btn.style.opacity = '1'
+}
+
+var importEntityType = 'student'
+var importMeta = {
+  student: { label: 'Students', url: '/api/sms/students/import', hint: '<strong>Required columns:</strong> Name, DOB, Gender, Class, Address<br/>Class must match an existing class name (e.g. <em>Primary 1 A</em>).<br/><a href="/api/sms/students/template" style="color:#276749;font-weight:700">⬇ Download template</a>', reload: () => { loadStudents(); loadStats() } },
+  teacher: { label: 'Teachers', url: '/api/sms/teachers/import', hint: '<strong>Required columns:</strong> Name, Phone, Email, Qualification, Subjects<br/>Subjects comma-separated (e.g. <em>Maths, Science</em>).<br/><a href="/api/sms/teachers/template" style="color:#276749;font-weight:700">⬇ Download template</a>', reload: () => loadTeachers() },
+  parent:  { label: 'Parents',  url: '/api/sms/parents/import',  hint: '<strong>Required columns:</strong> Name, Phone, Email, Address, Occupation<br/><a href="/api/sms/parents/template" style="color:#276749;font-weight:700">⬇ Download template</a>', reload: () => loadParents() },
+  staff:   { label: 'Staff',    url: '/api/sms/staff/import',    hint: '<strong>Required columns:</strong> Name, Role, Department, Phone, Email<br/>Role: Accountant, Secretary, Librarian, Security, Cleaner, Driver, Nurse, IT Officer, Other.<br/><a href="/api/sms/staff/template" style="color:#276749;font-weight:700">⬇ Download template</a>', reload: () => loadStaff() },
+}
+
+function openImport(type) {
+  importEntityType = type
+  const m = importMeta[type]
+  document.getElementById('import-title').textContent = '📂 Import ' + m.label + ' from Excel / CSV'
+  document.getElementById('import-hint').innerHTML = m.hint
+  document.getElementById('import-btn').textContent = 'Import ' + m.label
+  resetImport(false)
+  document.getElementById('import-overlay').classList.add('show')
+}
+
+function closeImport() {
+  document.getElementById('import-overlay').classList.remove('show')
+  resetImport(false)
+}
+
+async function runImport() {
+  if (!importFile) return
+  const m = importMeta[importEntityType]
+  const btn = document.getElementById('import-btn')
+  btn.textContent = 'Importing...'
+  btn.disabled = true
+
+  const form = new FormData()
+  form.append('file', importFile)
+
+  const res = await fetch(m.url, { method: 'POST', body: form }).then(r => r.json())
+
+  const el = document.getElementById('import-preview')
+  if (res.error) {
+    el.innerHTML = `<div style="background:#fff5f5;border-radius:8px;padding:12px;color:#e53e3e;font-size:13px">❌ ${res.error}</div>`
+    btn.textContent = 'Import ' + m.label; btn.disabled = false; btn.style.opacity = '1'
+    return
+  }
+
+  el.innerHTML = `<div style="background:#f0fff4;border-radius:8px;padding:14px;font-size:13px">
+    <p style="color:#276749;font-weight:700;font-size:15px">✅ Import Complete</p>
+    <p>Total rows: <strong>${res.total}</strong></p>
+    <p>Added: <strong style="color:#276749">${res.added}</strong></p>
+    <p>Skipped: <strong style="color:#e53e3e">${res.skipped}</strong></p>
+    ${res.errors && res.errors.length ? `<p style="color:#e53e3e;margin-top:8px">Errors:<br>${res.errors.map(e=>`• ${e}`).join('<br>')}</p>` : ''}
+  </div>`
+
+  btn.textContent = 'Done ✓'
+  m.reload()
+}
+
+function resetImport(clearOverlay = true) {
+  importFile = null
+  document.getElementById('import-preview').innerHTML = ''
+  const fi = document.getElementById('file-input')
+  if (fi) fi.value = ''
+  const btn = document.getElementById('import-btn')
+  if (btn) { btn.disabled = true; btn.style.opacity = '.5' }
+}
+
+// ── REPORTS ──
+var rptData = null
+
+async function loadReports() {
+  // Populate year dropdown
+  const yearSel = document.getElementById('rpt-year')
+  if (!yearSel.options.length) {
+    const cur = new Date().getFullYear()
+    for (let y = cur; y >= cur - 4; y--) {
+      const o = document.createElement('option')
+      o.value = o.textContent = y
+      yearSel.appendChild(o)
+    }
+  }
+  // Populate class dropdown
+  const clsSel = document.getElementById('rpt-class')
+  if (clsSel.options.length <= 1) {
+    const src = classesCache.length ? classesCache : await fetch('/api/sms/classes').then(r=>r.json()).catch(()=>[])
+    src.forEach(c => {
+      const o = document.createElement('option')
+      o.value = c.id; o.textContent = c.name
+      clsSel.appendChild(o)
+    })
+  }
+}
+
+async function loadReportStudents() {
+  const class_id = document.getElementById('rpt-class').value
+  const term     = document.getElementById('rpt-term').value
+  const year     = document.getElementById('rpt-year').value
+  if (!class_id) return alert('Please select a class')
+
+  const data = await fetch(`/api/scores/assessments?class_id=${class_id}&term=${encodeURIComponent(term)}&year=${year}`).then(r => r.json())
+  rptData = { class_id, term, year, ...data }
+
+  const students = data.students || []
+  const subjects = data.subjects || []
+
+  // Check if any scores exist
+  const hasScores = students.some(s => s.scores && s.scores.some(sc => sc.total > 0))
+
+  document.getElementById('rpt-table-card').style.display = hasScores ? '' : 'none'
+  document.getElementById('rpt-empty').style.display      = hasScores ? 'none' : ''
+  document.getElementById('rpt-stats').style.display      = hasScores ? '' : 'none'
+  document.getElementById('rpt-print-all').style.display  = hasScores ? '' : 'none'
+
+  if (!hasScores) return
+
+  // Stats
+  const totals = students.map(s => s.grand_total || 0).filter(t => t > 0)
+  const avgs   = students.map(s => s.scores && s.scores.length ? s.grand_total / s.scores.length : 0).filter(a => a > 0)
+  const classAvg = avgs.length ? (avgs.reduce((a,b)=>a+b,0) / avgs.length).toFixed(1) : '—'
+  const highest  = totals.length ? Math.max(...totals).toFixed(1) : '—'
+  const passRate = avgs.length ? Math.round(avgs.filter(a => a >= 50).length / avgs.length * 100) + '%' : '—'
+  document.getElementById('rpt-total-students').textContent = students.length
+  document.getElementById('rpt-class-avg').textContent = classAvg + (classAvg !== '—' ? '%' : '')
+  document.getElementById('rpt-highest').textContent    = highest
+  document.getElementById('rpt-pass-rate').textContent  = passRate
+
+  // Subject headers (collapsed into one <th> per subject)
+  const subHeaders = subjects.map(s => `<th style="font-size:11px;max-width:80px">${s.name}</th>`).join('')
+  document.getElementById('rpt-subject-headers').outerHTML = subHeaders + '<th style="display:none"></th>'
+
+  // Rows sorted by position
+  const sorted = [...students].sort((a,b) => (a.position||999) - (b.position||999))
+  document.getElementById('rpt-body').innerHTML = sorted.map(st => {
+    const avg = st.scores && st.scores.length ? (st.grand_total / st.scores.length).toFixed(1) : 0
+    const { grade } = gradeClientSide(parseFloat(avg))
+    const gradeColor = parseFloat(avg) >= 50 ? 'var(--green)' : 'var(--rose)'
+    const subCells = subjects.map(sub => {
+      const sc = st.scores ? st.scores.find(s => s.subject_id === sub.id) : null
+      const tot = sc ? sc.total.toFixed(1) : '—'
+      const color = sc && sc.total >= 50 ? 'var(--green)' : 'var(--rose)'
+      return `<td style="text-align:center;font-weight:700;color:${color}">${tot}</td>`
+    }).join('')
+    const posBadge = st.position <= 3 && st.position > 0
+      ? `<span style="background:${st.position===1?'#fbbf24':st.position===2?'#94a3b8':'#cd7c3b'};color:#fff;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:800">${st.position}</span>`
+      : `<span style="color:var(--muted);font-size:13px">${st.position||'—'}</span>`
+    return `<tr>
+      <td>${posBadge}</td>
+      <td style="font-weight:700">${st.name}</td>
+      <td style="font-size:12px;color:var(--muted)">${st.student_id}</td>
+      ${subCells}
+      <td style="font-weight:800;color:var(--blue)">${st.grand_total ? st.grand_total.toFixed(1) : '—'}</td>
+      <td style="font-weight:800;color:${gradeColor}">${avg}%</td>
+      <td><span style="background:rgba(130,201,6,.15);color:var(--green);padding:2px 8px;border-radius:6px;font-size:12px;font-weight:700">${grade}</span></td>
+      <td>
+        <a href="/api/scores/report/${st.id}/pdf?term=${encodeURIComponent(term)}&year=${year}" target="_blank"
+           class="btn btn-sm" style="padding:5px 10px;font-size:11px;background:rgba(56,189,248,.15);color:var(--blue);border:1px solid rgba(56,189,248,.3);text-decoration:none;border-radius:7px">🖨 PDF</a>
+      </td>
+    </tr>`
+  }).join('')
+}
+
+function gradeClientSide(total) {
+  if (total >= 80) return { grade: 'A1' }
+  if (total >= 70) return { grade: 'B2' }
+  if (total >= 60) return { grade: 'B3' }
+  if (total >= 55) return { grade: 'C4' }
+  if (total >= 50) return { grade: 'C5' }
+  if (total >= 45) return { grade: 'C6' }
+  if (total >= 40) return { grade: 'D7' }
+  if (total >= 35) return { grade: 'E8' }
+  return { grade: 'F9' }
+}
+
+function printAllReports() {
+  if (!rptData) return
+  const { class_id, term, year } = rptData
+  window.open(`/api/scores/report/class/pdf?class_id=${class_id}&term=${encodeURIComponent(term)}&year=${year}`, '_blank')
+}
+
+function filterReportTable() {
+  const q = document.getElementById('rpt-search').value.toLowerCase()
+  document.querySelectorAll('#rpt-body tr').forEach(tr => {
+    tr.style.display = tr.textContent.toLowerCase().includes(q) ? '' : 'none'
+  })
+}
+
+// Init — auto-switch to tab from URL ?tab=xxx
+const urlTab = new URLSearchParams(window.location.search).get('tab')
+if (urlTab) {
+  const tabEl = document.querySelector(`.tab[onclick*="'${urlTab}'"]`)
+  if (tabEl) { document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); tabEl.classList.add('active') }
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'))
+  const sec = document.getElementById('tab-' + urlTab)
+  if (sec) sec.classList.add('active')
+  loadTab(urlTab)
+} else {
+  loadStats()
+  loadDashNotices()
+}
+
+// ── RECEIPTS ──
+var rcpStudents = []
+var rcpSelectedStudentId = null
+var rcpSelectedStudentDbId = null
+
+async function loadReceipts() {
+  try {
+    const [studRes, allFeesRes] = await Promise.all([
+      fetch('/api/sms/students'),
+      fetch('/api/fees')
+    ])
+    rcpStudents = await studRes.json()
+    var allFees = await allFeesRes.json()
+
+    // Summary stats from all fees
+    var totalPaid    = allFees.filter(function(f){return f.status==='paid'}).reduce(function(s,f){return s+parseFloat(f.amount||0)},0)
+    var totalPending = allFees.filter(function(f){return f.status!=='paid'}).reduce(function(s,f){return s+parseFloat(f.amount||0)},0)
+    document.getElementById('rcp-total-paid').textContent    = 'GH₵ ' + totalPaid.toFixed(2)
+    document.getElementById('rcp-total-pending').textContent = 'GH₵ ' + totalPending.toFixed(2)
+    document.getElementById('rcp-count-paid').textContent    = allFees.filter(function(f){return f.status==='paid'}).length
+    document.getElementById('rcp-count-pending').textContent = allFees.filter(function(f){return f.status!=='paid'}).length
+
+    // Attach fee counts to students
+    rcpStudents.forEach(function(s) {
+      s._fees = allFees.filter(function(f){ return f.student_id === s.id || f.sid === s.student_id })
+    })
+
+    renderStudentList()
+  } catch(e) {
+    document.getElementById('rcp-student-list').innerHTML = '<div style="padding:20px;color:#f87171;text-align:center">Failed to load.</div>'
+  }
+}
+
+function renderStudentList() {
+  var q = (document.getElementById('rcp-search').value || '').toLowerCase()
+  var list = rcpStudents.filter(function(s) {
+    if (!q) return true
+    return (s.name||'').toLowerCase().includes(q) ||
+           (s.student_id||'').toLowerCase().includes(q) ||
+           (s.parent_name||'').toLowerCase().includes(q) ||
+           (s.class_name||'').toLowerCase().includes(q)
+  })
+  var el = document.getElementById('rcp-student-list')
+  if (!list.length) { el.innerHTML = '<div style="padding:20px;color:#999;text-align:center">No students found.</div>'; return }
+  el.innerHTML = list.map(function(s) {
+    var fees = s._fees || []
+    var pending = fees.filter(function(f){return f.status!=='paid'}).length
+    var paid    = fees.filter(function(f){return f.status==='paid'}).length
+    var isActive = rcpSelectedStudentId === s.student_id
+    return '<div onclick="openStudentDetail(\'' + s.id + '\',\'' + s.student_id + '\')" style="' +
+      'padding:14px 18px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.05);' +
+      'background:' + (isActive ? 'rgba(130,201,6,.12)' : 'transparent') + ';' +
+      'border-left:3px solid ' + (isActive ? 'var(--green)' : 'transparent') + ';' +
+      'transition:all .15s">' +
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start">' +
+        '<div>' +
+          '<div style="font-weight:700;font-size:14px;color:var(--text)">' + s.name + '</div>' +
+          '<div style="font-size:11px;color:var(--muted);margin-top:2px">' + (s.student_id||'') + ' &bull; ' + (s.class_name||'—') + '</div>' +
+          (s.parent_name ? '<div style="font-size:11px;color:#6b7280;margin-top:2px">👨‍👩‍👧 ' + s.parent_name + (s.parent_phone ? ' &bull; ' + s.parent_phone : '') + '</div>' : '') +
+        '</div>' +
+        '<div style="text-align:right;flex-shrink:0;margin-left:8px">' +
+          (pending ? '<div style="font-size:10px;font-weight:700;color:#fbbf24;background:rgba(251,191,36,.12);padding:2px 7px;border-radius:10px;margin-bottom:3px">' + pending + ' owing</div>' : '') +
+          (paid    ? '<div style="font-size:10px;font-weight:700;color:#34d399;background:rgba(52,211,153,.1);padding:2px 7px;border-radius:10px">' + paid + ' paid</div>' : '') +
+        '</div>' +
+      '</div>' +
+    '</div>'
+  }).join('')
+}
+
+function filterStudentList() {
+  renderStudentList()
+}
+
+async function openStudentDetail(dbId, studentId) {
+  rcpSelectedStudentId   = studentId
+  rcpSelectedStudentDbId = dbId
+  renderStudentList()
+
+  var panel = document.getElementById('rcp-detail-panel')
+  panel.innerHTML = '<div class="card" style="margin-bottom:0"><div style="padding:28px;text-align:center;color:var(--muted)">Loading…</div></div>'
+  document.getElementById('rcp-add-fee-bar').style.display = 'block'
+
+  try {
+    const res  = await fetch('/api/fees/student/' + dbId)
+    var fees   = await res.json()
+    var s      = rcpStudents.find(function(x){return x.id == dbId}) || {}
+
+    // Group by category
+    var cats = {
+      'School Fees':  [],
+      'Canteen':      [],
+      'Books':        [],
+      'Uniform':      [],
+      'Activities':   [],
+      'Other':        []
+    }
+    fees.forEach(function(f) {
+      var t = (f.fee_type || '').toLowerCase()
+      if (t.includes('school') || t.includes('tuition'))          cats['School Fees'].push(f)
+      else if (t.includes('canteen') || t.includes('food') || t.includes('lunch')) cats['Canteen'].push(f)
+      else if (t.includes('book') || t.includes('textbook'))       cats['Books'].push(f)
+      else if (t.includes('uniform') || t.includes('cloth'))       cats['Uniform'].push(f)
+      else if (t.includes('activit') || t.includes('excursion') || t.includes('sport') || t.includes('trip')) cats['Activities'].push(f)
+      else cats['Other'].push(f)
+    })
+
+    var totalPaid    = fees.filter(function(f){return f.status==='paid'}).reduce(function(s,f){return s+parseFloat(f.amount||0)},0)
+    var totalPending = fees.filter(function(f){return f.status!=='paid'}).reduce(function(s,f){return s+parseFloat(f.amount||0)},0)
+
+    var catColors = { 'School Fees':'#38bdf8','Canteen':'#34d399','Books':'#a78bfa','Uniform':'#fbbf24','Activities':'#f87171','Other':'#94a3b8' }
+    var catIcons  = { 'School Fees':'🏫','Canteen':'🍽️','Books':'📚','Uniform':'👕','Activities':'⚽','Other':'📋' }
+
+    var catsHtml = Object.keys(cats).map(function(cat) {
+      var rows = cats[cat]
+      if (!rows.length) return ''
+      var color = catColors[cat] || '#94a3b8'
+      var icon  = catIcons[cat]  || '📋'
+      var rowsHtml = rows.map(function(f) {
+        var isPaid = f.status === 'paid'
+        var badge  = isPaid ? '<span class="badge badge-green" style="font-size:10px">✓ PAID</span>' : '<span class="badge badge-yellow" style="font-size:10px">⏳ OWING</span>'
+        var rcptBtn = isPaid ? '<a href="/api/fees/'+f.id+'/receipt" target="_blank" class="btn btn-green btn-sm" style="font-size:11px;padding:4px 10px">🖨 Receipt</a>' : '<button class="btn btn-blue btn-sm" style="font-size:11px;padding:4px 10px" onclick="rcpMarkPaid('+f.id+',\''+dbId+'\',\''+studentId+'\')">Mark Paid</button>'
+        return '<tr>' +
+          '<td style="font-size:13px">' + f.fee_type + (f.note ? '<br/><small style="color:#6b7280">' + f.note + '</small>' : '') + '</td>' +
+          '<td style="font-size:12px">' + f.term + ' / ' + f.year + '</td>' +
+          '<td style="font-weight:700;color:' + (isPaid?'#34d399':'#fbbf24') + '">GH₵ ' + parseFloat(f.amount).toFixed(2) + '</td>' +
+          '<td>' + badge + '</td>' +
+          '<td style="font-size:11px;color:var(--muted)">' + (f.receipt_no||'—') + '</td>' +
+          '<td style="font-size:11px;color:var(--muted)">' + (f.paid_at?new Date(f.paid_at).toLocaleDateString('en-GB'):'—') + '</td>' +
+          '<td>' + rcptBtn + '</td>' +
+        '</tr>'
+      }).join('')
+      var catTotal = rows.reduce(function(s,f){return s+parseFloat(f.amount||0)},0)
+      return '<div style="margin-bottom:20px">' +
+        '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">' +
+          '<span style="font-size:18px">' + icon + '</span>' +
+          '<span style="font-weight:800;font-size:14px;color:' + color + '">' + cat + '</span>' +
+          '<span style="font-size:12px;color:var(--muted);margin-left:auto">GH₵ ' + catTotal.toFixed(2) + '</span>' +
+        '</div>' +
+        '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse"><thead><tr>' +
+          '<th style="font-size:11px;text-align:left;padding:8px 10px;background:rgba(255,255,255,.04);color:var(--muted)">Description</th>' +
+          '<th style="font-size:11px;text-align:left;padding:8px 10px;background:rgba(255,255,255,.04);color:var(--muted)">Term / Year</th>' +
+          '<th style="font-size:11px;text-align:left;padding:8px 10px;background:rgba(255,255,255,.04);color:var(--muted)">Amount</th>' +
+          '<th style="font-size:11px;text-align:left;padding:8px 10px;background:rgba(255,255,255,.04);color:var(--muted)">Status</th>' +
+          '<th style="font-size:11px;text-align:left;padding:8px 10px;background:rgba(255,255,255,.04);color:var(--muted)">Receipt No</th>' +
+          '<th style="font-size:11px;text-align:left;padding:8px 10px;background:rgba(255,255,255,.04);color:var(--muted)">Date Paid</th>' +
+          '<th style="font-size:11px;text-align:left;padding:8px 10px;background:rgba(255,255,255,.04);color:var(--muted)">Action</th>' +
+        '</tr></thead><tbody>' + rowsHtml + '</tbody></table></div>' +
+      '</div>'
+    }).join('')
+
+    panel.innerHTML =
+      '<div class="card" style="margin-bottom:16px">' +
+        '<div style="padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">' +
+          '<div>' +
+            '<div style="font-size:18px;font-weight:800;color:var(--text)">' + s.name + '</div>' +
+            '<div style="font-size:12px;color:var(--muted);margin-top:4px">' +
+              (s.student_id||'') + ' &bull; ' + (s.class_name||'—') +
+              (s.gender ? ' &bull; ' + s.gender : '') +
+            '</div>' +
+            (s.parent_name ? '<div style="font-size:12px;color:#6b7280;margin-top:3px">👨‍👩‍👧 ' + s.parent_name + (s.parent_phone ? ' · ' + s.parent_phone : '') + '</div>' : '') +
+          '</div>' +
+          '<div style="display:flex;gap:10px;flex-wrap:wrap">' +
+            '<a href="/api/fees/statement/' + dbId + '" target="_blank" class="btn btn-blue" style="font-size:13px">📄 Full Statement PDF</a>' +
+            '<button class="btn btn-green" style="font-size:13px" onclick="openAddFeeModal()">+ Add Fee</button>' +
+          '</div>' +
+        '</div>' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;border-bottom:1px solid var(--border)">' +
+          '<div style="padding:16px 20px;text-align:center;border-right:1px solid var(--border)">' +
+            '<div style="font-size:22px;font-weight:800;color:#34d399">GH₵ ' + totalPaid.toFixed(2) + '</div>' +
+            '<div style="font-size:11px;color:var(--muted);margin-top:4px;text-transform:uppercase;font-weight:700">Total Paid</div>' +
+          '</div>' +
+          '<div style="padding:16px 20px;text-align:center;border-right:1px solid var(--border)">' +
+            '<div style="font-size:22px;font-weight:800;color:#fbbf24">GH₵ ' + totalPending.toFixed(2) + '</div>' +
+            '<div style="font-size:11px;color:var(--muted);margin-top:4px;text-transform:uppercase;font-weight:700">Outstanding</div>' +
+          '</div>' +
+          '<div style="padding:16px 20px;text-align:center">' +
+            '<div style="font-size:22px;font-weight:800;color:var(--text)">GH₵ ' + (totalPaid+totalPending).toFixed(2) + '</div>' +
+            '<div style="font-size:11px;color:var(--muted);margin-top:4px;text-transform:uppercase;font-weight:700">Grand Total</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="card" style="margin-bottom:0">' +
+        '<div style="padding:20px 24px">' +
+          (fees.length ? catsHtml : '<div style="text-align:center;padding:32px;color:var(--muted)">No payment records yet. Click + Add Fee to add one.</div>') +
+        '</div>' +
+      '</div>'
+  } catch(e) {
+    panel.innerHTML = '<div class="card"><div style="padding:24px;color:#f87171">Failed to load student fees.</div></div>'
+  }
+}
+
+async function rcpMarkPaid(feeId, dbId, studentId) {
+  if (!confirm('Mark this fee as paid and generate a receipt number?')) return
+  await fetch('/api/fees/' + feeId + '/pay', { method: 'POST' })
+  openStudentDetail(dbId, studentId)
+  loadReceipts()
+}
+
+function openAddFeeModal() {
+  if (!rcpSelectedStudentDbId) { alert('Select a student first'); return }
+  var s = rcpStudents.find(function(x){return x.id == rcpSelectedStudentDbId}) || {}
+  openModal('fee')
+  // Pre-select student in fee modal
+  setTimeout(function() {
+    var sel = document.getElementById('fee-student-id')
+    if (sel) sel.value = rcpSelectedStudentDbId
+  }, 100)
+}
+</script>
+
+<!-- FULL-PAGE ADD PARENT OVERLAY -->
+<div id="add-parent-overlay" style="display:none;position:fixed;inset:0;z-index:2000;background:linear-gradient(135deg,#0a0f1e 0%,#0e1a2e 50%,#0a1a0a 100%);overflow:hidden">
+
+  <!-- Top bar -->
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 32px;border-bottom:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.3);backdrop-filter:blur(12px)">
+    <div style="display:flex;align-items:center;gap:16px">
+      <span style="font-size:22px">👨‍👩‍👧</span>
+      <div>
+        <div style="font-size:16px;font-weight:800;color:#e8edf5">Add Parent / Guardian</div>
+        <div style="font-size:12px;color:#8b9ab5;margin-top:2px">Fill in the details below — both parents recommended</div>
+      </div>
+    </div>
+    <!-- Mode selector -->
+    <div style="display:flex;gap:6px">
+      <button id="np-opt-both"   onclick="setParentMode('both')"   style="padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;border:1.5px solid rgba(56,189,248,.45);background:rgba(56,189,248,.15);color:#38bdf8">👨‍👩‍👧 Both</button>
+      <button id="np-opt-mother" onclick="setParentMode('mother')" style="padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;border:1.5px solid rgba(255,255,255,.1);background:transparent;color:#8b9ab5">👩 Mother</button>
+      <button id="np-opt-father" onclick="setParentMode('father')" style="padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;border:1.5px solid rgba(255,255,255,.1);background:transparent;color:#8b9ab5">👨 Father</button>
+    </div>
+    <button onclick="toggleNewParentForm()" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:#e8edf5;font-size:20px;width:38px;height:38px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
+  </div>
+
+  <!-- Body: two columns -->
+  <div id="np-columns" style="display:grid;grid-template-columns:1fr 1fr;gap:0;height:calc(100vh - 140px)">
+
+    <!-- MOTHER COLUMN -->
+    <div id="np-mother-col" style="padding:32px 40px;border-right:1px solid rgba(255,255,255,.07)">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:24px">
+        <span style="font-size:32px">👩</span>
+        <div>
+          <div style="font-size:15px;font-weight:800;color:#f9a8d4">Mother</div>
+          <div style="font-size:11px;color:#8b9ab5;margin-top:2px">Primary guardian / biological mother</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+        <div class="form-group" style="margin:0"><label>Full Name *</label><input id="np-mname" placeholder="Mother's full name"/></div>
+        <div class="form-group" style="margin:0"><label>Phone *</label><input id="np-mphone" placeholder="+233..."/></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+        <div class="form-group" style="margin:0"><label>Email</label><input id="np-memail" type="email" placeholder="email@example.com"/></div>
+        <div class="form-group" style="margin:0"><label>Occupation</label><input id="np-mocc" placeholder="e.g. Nurse, Teacher"/></div>
+      </div>
+      <div class="form-group" style="margin:0"><label>Home Address</label><input id="np-maddress" placeholder="Home address"/></div>
+    </div>
+
+    <!-- FATHER COLUMN -->
+    <div id="np-father-col" style="padding:32px 40px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:24px">
+        <span style="font-size:32px">👨</span>
+        <div>
+          <div style="font-size:15px;font-weight:800;color:#93c5fd">Father</div>
+          <div style="font-size:11px;color:#8b9ab5;margin-top:2px">Primary guardian / biological father</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+        <div class="form-group" style="margin:0"><label>Full Name *</label><input id="np-fname" placeholder="Father's full name"/></div>
+        <div class="form-group" style="margin:0"><label>Phone *</label><input id="np-fphone" placeholder="+233..."/></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+        <div class="form-group" style="margin:0"><label>Email</label><input id="np-femail" type="email" placeholder="email@example.com"/></div>
+        <div class="form-group" style="margin:0"><label>Occupation</label><input id="np-focc" placeholder="e.g. Engineer, Driver"/></div>
+      </div>
+      <div class="form-group" style="margin:0"><label>Home Address</label><input id="np-faddress" placeholder="Home address"/></div>
+    </div>
+  </div>
+
+  <!-- Bottom action bar -->
+  <div style="position:fixed;bottom:0;left:0;right:0;padding:16px 40px;background:rgba(10,15,30,.95);backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:space-between">
+    <div id="np-msg" style="font-size:13px;font-weight:600"></div>
+    <div style="display:flex;gap:12px">
+      <button onclick="toggleNewParentForm()" style="padding:12px 28px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:#e8edf5">Cancel</button>
+      <button onclick="saveNewParent()" style="padding:12px 32px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;border:none;background:linear-gradient(135deg,#82c906,#6aab00);color:#fff;box-shadow:0 4px 20px rgba(130,201,6,.35)">💾 Save &amp; Select Parent</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>

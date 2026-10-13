@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abofra World School — Admin Panel</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: #111; color: #e5e7eb; min-height: 100vh; }
+
+  /* TOP BAR */
+  .topbar {
+    background: #A4DE02; color: #1a1a1a;
+    padding: 10px 28px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .topbar .brand { font-weight: 900; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; }
+  .topbar .logout a { font-size: 12px; font-weight: 700; color: #1a1a1a; text-decoration: none; background: #1a1a1a22; padding: 4px 14px; border-radius: 2px; }
+  .topbar .logout a:hover { background: #1a1a1a44; }
+
+  /* HEADER */
+  .header {
+    background: #1a1a1a; border-bottom: 3px solid #A4DE02;
+    padding: 22px 28px; display: flex; align-items: center; gap: 18px;
+  }
+  .header img { width: 52px; height: 52px; object-fit: contain; }
+  .header h1 { font-size: 20px; font-weight: 900; color: #fff; letter-spacing: .04em; }
+  .header p  { font-size: 12px; color: #9ca3af; margin-top: 2px; }
+
+  /* NAV TABS */
+  .tabs { background: #1a1a1a; display: flex; gap: 2px; padding: 0 28px; border-bottom: 1px solid #2a2a2a; overflow-x: auto; }
+  .tab-btn {
+    padding: 13px 20px; font-size: 12px; font-weight: 700; letter-spacing: .1em;
+    text-transform: uppercase; cursor: pointer; border: none; background: transparent;
+    color: #9ca3af; border-bottom: 3px solid transparent; transition: all .2s; white-space: nowrap;
+  }
+  .tab-btn.active, .tab-btn:hover { color: #A4DE02; border-bottom-color: #A4DE02; }
+
+  /* MAIN */
+  .main { max-width: 1100px; margin: 0 auto; padding: 32px 28px; }
+
+  .section-title {
+    font-size: 11px; font-weight: 800; letter-spacing: .15em; text-transform: uppercase;
+    color: #A4DE02; margin-bottom: 20px; padding-bottom: 8px; border-bottom: 1px solid #2a2a2a;
+  }
+
+  /* IMAGE GRID */
+  .image-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+
+  .img-card {
+    background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 4px; overflow: hidden;
+    transition: border-color .2s;
+  }
+  .img-card:hover { border-color: #A4DE0266; }
+
+  .img-preview {
+    width: 100%; height: 160px; object-fit: cover; display: block;
+    background: #222; position: relative;
+  }
+  .img-placeholder {
+    width: 100%; height: 160px; background: #222;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+  }
+  .img-placeholder svg { opacity: .3; }
+  .img-placeholder span { font-size: 11px; color: #6b7280; }
+
+  .img-info { padding: 14px; }
+  .img-label { font-size: 12px; font-weight: 700; color: #d1d5db; margin-bottom: 10px; }
+  .img-url   { font-size: 10px; color: #6b7280; margin-bottom: 12px; word-break: break-all; min-height: 14px; }
+
+  .img-actions { display: flex; gap: 8px; }
+
+  .btn-upload {
+    flex: 1; background: #A4DE02; color: #1a1a1a; border: none; cursor: pointer;
+    font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+    padding: 9px 12px; border-radius: 2px; transition: background .2s;
+  }
+  .btn-upload:hover { background: #8fc400; }
+
+  .btn-remove {
+    background: transparent; border: 1px solid #3f3f3f; color: #9ca3af; cursor: pointer;
+    font-size: 11px; padding: 9px 12px; border-radius: 2px; transition: all .2s;
+  }
+  .btn-remove:hover { border-color: #ef4444; color: #ef4444; }
+
+  /* TOAST */
+  .toast {
+    position: fixed; bottom: 28px; right: 28px; z-index: 9999;
+    background: #A4DE02; color: #1a1a1a; font-weight: 700; font-size: 13px;
+    padding: 12px 24px; border-radius: 4px; box-shadow: 0 4px 20px #00000066;
+    transform: translateY(80px); opacity: 0; transition: all .35s cubic-bezier(.22,1,.36,1);
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast.error { background: #ef4444; color: #fff; }
+
+  /* HIDDEN */
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* NEWS TABLE */
+  .news-table { width: 100%; border-collapse: collapse; }
+  .news-table th { text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: #6b7280; padding: 10px 14px; border-bottom: 1px solid #2a2a2a; }
+  .news-table td { padding: 12px 14px; border-bottom: 1px solid #1e1e1e; font-size: 13px; vertical-align: middle; }
+  .news-table tr:hover td { background: #1a1a1a; }
+  .badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 2px; background: #A4DE0222; color: #A4DE02; text-transform: uppercase; }
+  .btn-sm { font-size: 11px; font-weight: 700; padding: 5px 12px; border-radius: 2px; border: none; cursor: pointer; }
+  .btn-green { background: #A4DE02; color: #1a1a1a; }
+  .btn-red   { background: transparent; border: 1px solid #3f3f3f; color: #ef4444; }
+
+  /* MODAL */
+  .modal-bg { display: none; position: fixed; inset: 0; background: #00000099; z-index: 1000; align-items: center; justify-content: center; }
+  .modal-bg.open { display: flex; }
+  .modal { background: #1a1a1a; border: 1px solid #2a2a2a; border-top: 3px solid #A4DE02; padding: 28px; width: 500px; max-width: 95vw; border-radius: 4px; }
+  .modal h3 { font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: .1em; color: #fff; margin-bottom: 20px; }
+  .form-group { margin-bottom: 16px; }
+  .form-group label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: #9ca3af; margin-bottom: 6px; }
+  .form-group input, .form-group textarea, .form-group select {
+    width: 100%; background: #111; border: 1px solid #2a2a2a; color: #e5e7eb;
+    padding: 9px 12px; font-size: 13px; border-radius: 2px; outline: none;
+    font-family: inherit;
+  }
+  .form-group input:focus, .form-group textarea:focus { border-color: #A4DE02; }
+  .form-group textarea { resize: vertical; min-height: 80px; }
+  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+  .btn-cancel { background: transparent; border: 1px solid #3f3f3f; color: #9ca3af; cursor: pointer; font-size: 12px; font-weight: 700; padding: 9px 18px; border-radius: 2px; }
+  .btn-save   { background: #A4DE02; color: #1a1a1a; border: none; cursor: pointer; font-size: 12px; font-weight: 800; padding: 9px 22px; border-radius: 2px; }
+  .btn-add    { background: #A4DE02; color: #1a1a1a; border: none; cursor: pointer; font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; padding: 9px 18px; border-radius: 2px; margin-bottom: 20px; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="brand">Abofra World School &mdash; Admin Panel</span>
+  <div class="logout"><a href="/admin/logout">Logout</a></div>
+</div>
+
+<div class="header">
+  <img src="/logo.png" onerror="this.style.display='none'" />
+  <div>
+    <h1>Admin Dashboard</h1>
+    <p>Manage website images, news articles, and content</p>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchTab('images')">&#128444; Images</button>
+  <button class="tab-btn" onclick="switchTab('banners')">&#127756; Page Banners</button>
+  <button class="tab-btn" onclick="switchTab('news')">&#128240; News</button>
+  <button class="tab-btn" onclick="switchTab('contacts')">&#9993; Contact Messages</button>
+  <button class="tab-btn" onclick="switchTab('chat')">&#128172; Live Chat</button>
+  <button class="tab-btn" onclick="switchTab('sms')">&#127979; School Portal</button>
+</div>
+
+<div class="main">
+
+  <!-- IMAGES TAB -->
+  <div class="tab-panel active" id="tab-images">
+
+    <div id="hero-section" style="margin-bottom:40px">
+      <div class="section-title">Hero Section — Landing Page Slides</div>
+      <div class="image-grid" id="hero-grid"></div>
+    </div>
+
+    <div id="inner-section" style="margin-bottom:40px">
+      <div class="section-title">Inner Page Banners</div>
+      <div class="image-grid" id="inner-grid"></div>
+    </div>
+
+    <div id="cards-section" style="margin-bottom:40px">
+      <div class="section-title">Feature Cards — Homepage</div>
+      <div class="image-grid" id="cards-grid"></div>
+    </div>
+
+    <div id="logos-section" style="margin-bottom:40px">
+      <div class="section-title">Logo Images</div>
+      <div class="image-grid" id="logos-grid"></div>
+    </div>
+
+    <div id="curriculum-section">
+      <div class="section-title">Curriculum Logos — G.E.S &amp; Cambridge</div>
+      <div class="image-grid" id="curriculum-grid"></div>
+    </div>
+
+  </div>
+
+  <!-- BANNERS TAB -->
+  <div class="tab-panel" id="tab-banners">
+
+    <div style="margin-bottom:40px">
+      <div class="section-title">About Pages — Banners</div>
+      <div class="image-grid" id="banner-about-grid"></div>
+    </div>
+
+    <div style="margin-bottom:40px">
+      <div class="section-title">Education Pages — Banners</div>
+      <div class="image-grid" id="banner-education-grid"></div>
+    </div>
+
+    <div style="margin-bottom:40px">
+      <div class="section-title">Other Section Banners</div>
+      <div class="image-grid" id="banner-other-grid"></div>
+    </div>
+
+  </div>
+
+  <!-- NEWS TAB -->
+  <div class="tab-panel" id="tab-news">
+    <button class="btn-add" onclick="openNewsModal()">+ Add News Article</button>
+    <table class="news-table">
+      <thead>
+        <tr>
+          <th>Title</th><th>Category</th><th>Date</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="news-tbody"></tbody>
+    </table>
+  </div>
+
+  <!-- CONTACTS TAB -->
+  <div class="tab-panel" id="tab-contacts">
+    <table class="news-table">
+      <thead>
+        <tr><th>Name</th><th>Email</th><th>Subject</th><th>Date</th><th></th></tr>
+      </thead>
+      <tbody id="contacts-tbody"></tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- NEWS MODAL -->
+<div class="modal-bg" id="news-modal">
+  <div class="modal">
+    <h3 id="modal-title">Add News Article</h3>
+    <input type="hidden" id="news-id" />
+    <div class="form-group">
+      <label>Title</label>
+      <input type="text" id="news-title" placeholder="Article title" />
+    </div>
+    <div class="form-group">
+      <label>Excerpt (short summary)</label>
+      <textarea id="news-excerpt" placeholder="Short summary shown on homepage..."></textarea>
+    </div>
+    <div class="form-group">
+      <label>Full Content</label>
+      <textarea id="news-content" style="min-height:120px" placeholder="Full article text..."></textarea>
+    </div>
+    <div class="form-group">
+      <label>Category</label>
+      <select id="news-category">
+        <option>Achievement</option><option>Events</option><option>Academic</option>
+        <option>Facilities</option><option>Sports</option><option>Community</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Date</label>
+      <input type="text" id="news-date" placeholder="e.g. Jun 23, 2026" />
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeNewsModal()">Cancel</button>
+      <button class="btn-save" onclick="saveNews()">Save Article</button>
+    </div>
+  </div>
+</div>
+
+<!-- LIVE CHAT TAB -->
+<div class="tab-panel" id="tab-chat">
+  <div style="background:linear-gradient(135deg,#0a1a0a 0%,#0d1f1a 40%,#0a1020 100%);border-radius:16px;padding:24px;min-height:620px;box-shadow:0 8px 40px rgba(0,0,0,.6)">
+
+    <!-- Header bar -->
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+      <div style="width:10px;height:10px;border-radius:50%;background:#82c906;box-shadow:0 0 8px #82c906"></div>
+      <span style="font-size:13px;font-weight:900;letter-spacing:.15em;text-transform:uppercase;background:linear-gradient(90deg,#82c906,#a8e63d);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Live Chat Console</span>
+      <div style="flex:1;height:1px;background:linear-gradient(90deg,#82c90633,transparent)"></div>
+    </div>
+
+    <div style="display:flex;gap:20px;height:560px">
+
+      <!-- Sessions list — glass panel -->
+      <div style="width:280px;flex-shrink:0;background:rgba(255,255,255,.04);backdrop-filter:blur(12px);border:1px solid rgba(130,201,6,.18);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 4px 24px rgba(0,0,0,.4)">
+        <div style="padding:12px 16px;background:linear-gradient(135deg,rgba(130,201,6,.15),rgba(130,201,6,.05));border-bottom:1px solid rgba(130,201,6,.2);">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <span style="font-size:10px;font-weight:900;letter-spacing:.18em;text-transform:uppercase;color:#82c906">&#128172; Conversations</span>
+          </div>
+          <div style="display:flex;gap:6px">
+            <button onclick="selectAllChats()" style="flex:1;background:rgba(130,201,6,.15);border:1px solid rgba(130,201,6,.3);color:#82c906;font-size:10px;font-weight:700;padding:5px 0;border-radius:6px;cursor:pointer">&#9989; Select All</button>
+            <button onclick="deleteSelectedChats()" style="flex:1;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);color:#f87171;font-size:10px;font-weight:700;padding:5px 0;border-radius:6px;cursor:pointer">&#128465; Delete All</button>
+          </div>
+        </div>
+        <div id="chat-sessions" style="overflow-y:auto;flex:1"></div>
+      </div>
+
+      <!-- Chat window — glass panel -->
+      <div style="flex:1;background:rgba(255,255,255,.03);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.08);border-radius:12px;display:flex;flex-direction:column;min-width:0;box-shadow:0 4px 24px rgba(0,0,0,.4);overflow:hidden">
+        <div id="chat-header" style="padding:16px 20px;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border-bottom:1px solid rgba(255,255,255,.08);font-size:13px;font-weight:700;color:#d1d5db">
+          Select a conversation
+        </div>
+        <div id="chat-messages" style="flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:12px;background:transparent"></div>
+        <div style="padding:14px 18px;border-top:1px solid rgba(255,255,255,.08);display:flex;gap:10px;background:rgba(0,0,0,.2)">
+          <input id="chat-reply-input" type="text" placeholder="Type a reply to the visitor..." style="flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(130,201,6,.3);color:#e5e7eb;padding:10px 16px;font-size:13px;border-radius:8px;outline:none" onkeydown="if(event.key==='Enter')sendChatReply()" />
+          <button onclick="sendChatReply()" style="background:linear-gradient(135deg,#82c906,#5a8f04);color:#0a0a0a;border:none;font-weight:900;font-size:12px;padding:10px 22px;border-radius:8px;cursor:pointer;text-transform:uppercase;letter-spacing:.1em;box-shadow:0 2px 12px rgba(130,201,6,.4)">Send &#10148;</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- SCHOOL PORTAL TAB -->
+<div class="tab-panel" id="tab-sms" style="display:none;padding:0">
+  <iframe src="/admin/sms" id="sms-iframe" style="width:100%;height:calc(100vh - 100px);border:none;border-radius:0;display:block"></iframe>
+</div>
+
+<!-- CONTACT DETAIL MODAL -->
+<div class="modal-bg" id="contact-modal">
+  <div class="modal" style="width:800px;max-width:95vw">
+    <h3>Message Details</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px">
+      <div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#9ca3af;margin-bottom:4px">From</div>
+        <div id="contact-name" style="color:#f3f4f6;font-weight:600;font-size:14px"></div>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#9ca3af;margin-bottom:4px">Email</div>
+        <div id="contact-email" style="color:#82c906;font-size:13px"></div>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#9ca3af;margin-bottom:4px">Subject</div>
+        <div id="contact-subject" style="color:#f3f4f6;font-size:13px"></div>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#9ca3af;margin-bottom:4px">Date</div>
+        <div id="contact-date" style="color:#6b7280;font-size:12px;font-weight:600"></div>
+      </div>
+    </div>
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#9ca3af;margin-bottom:8px">Message</div>
+    <div id="contact-message" style="background:#111;border:1px solid #2a2a2a;padding:16px;color:#d1d5db;font-size:13px;line-height:1.7;white-space:pre-wrap;min-height:200px;border-radius:2px"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeContact()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- Hidden file input -->
+<input type="file" id="file-input" accept="image/*" style="display:none" />
+
+<script>
+const API = 'http://localhost:5002/api'
+let currentUploadId = null
+
+// ── ROLE ACCESS ──
+var adminRole = localStorage.getItem('abofra-role') || 'admin'
+var adminDisplay = localStorage.getItem('abofra-display') || 'Admin'
+
+// Engineer-only tabs (hidden from school admin)
+var engineerOnlyTabs = ['images', 'banners']
+
+function applyRoleAccess() {
+  // Show role badge in topbar
+  var brand = document.querySelector('.topbar .brand')
+  if (brand) brand.innerHTML = 'Abofra World School &mdash; <span style="color:#1a1a1a;background:' + (adminRole==='engineer'?'#1a1a1a22':'#00000022') + ';padding:2px 8px;border-radius:4px;font-size:11px">' + (adminRole==='engineer'?'&#9881; Engineer':'&#128084; School Admin') + '</span>'
+
+  if (adminRole === 'engineer') return // full access
+
+  // Hide engineer-only tab BUTTONS
+  document.querySelectorAll('.tab-btn').forEach(function(btn) {
+    var onclick = btn.getAttribute('onclick') || ''
+    engineerOnlyTabs.forEach(function(tab) {
+      if (onclick.indexOf("'" + tab + "'") !== -1) btn.style.display = 'none'
+    })
+  })
+
+  // Hide engineer-only tab PANELS completely
+  engineerOnlyTabs.forEach(function(tab) {
+    var panel = document.getElementById('tab-' + tab)
+    if (panel) panel.style.display = 'none !important'
+  })
+
+  // Hide upload/remove buttons by class
+  document.querySelectorAll('.btn-upload, .btn-remove').forEach(function(el) { el.style.display = 'none' })
+
+  // Hide file inputs
+  document.querySelectorAll('input[type="file"]').forEach(function(el) { el.style.display = 'none' })
+
+  // Hide SMS link in topbar
+  document.querySelectorAll('a[href*="sms"]').forEach(function(el) { el.style.display = 'none' })
+
+  // Switch default tab to news (away from images)
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); p.style.display = 'none' })
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active') })
+  var newsPanel = document.getElementById('tab-news')
+  if (newsPanel) { newsPanel.classList.add('active'); newsPanel.style.display = 'block' }
+  document.querySelectorAll('.tab-btn').forEach(function(b) {
+    if ((b.getAttribute('onclick') || '').indexOf("'news'") !== -1) b.classList.add('active')
+  })
+  loadNews()
+}
+
+document.addEventListener('DOMContentLoaded', applyRoleAccess)
+
+// ── TAB SWITCHING ──
+function switchTab(name) {
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); p.style.display = 'none' })
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active') })
+  var panel = document.getElementById('tab-' + name)
+  panel.classList.add('active')
+  panel.style.display = 'block'
+  var btns = document.querySelectorAll('.tab-btn')
+  btns.forEach(function(b) { if (b.getAttribute('onclick') && b.getAttribute('onclick').indexOf("'" + name + "'") !== -1) b.classList.add('active') })
+  if (name === 'banners') loadBanners()
+  if (name === 'news') loadNews()
+  if (name === 'contacts') loadContacts()
+  if (name === 'chat') loadChatSessions()
+}
+
+// ── TOAST ──
+function toast(msg, isError = false) {
+  const t = document.getElementById('toast')
+  t.textContent = msg
+  t.className = 'toast show' + (isError ? ' error' : '')
+  setTimeout(() => t.className = 'toast', 3000)
+}
+
+// ── IMAGES ──
+async function loadImages() {
+  const data = await fetch(`${API}/images`).then(r => r.json()).catch(() => null)
+  if (!data) return
+
+  renderGrid('hero-grid',       data.hero)
+  renderGrid('inner-grid',      data.innerPages)
+  renderGrid('cards-grid',      data.featureCards)
+  renderGrid('logos-grid',      data.logos)
+  renderGrid('curriculum-grid', data.curriculumLogos)
+}
+
+function renderGrid(gridId, items) {
+  const grid = document.getElementById(gridId)
+  grid.innerHTML = items.map(item => `
+    <div class="img-card" id="card-${item.id}">
+      ${item.url
+        ? `<img class="img-preview" src="http://localhost:5002${item.url}" alt="${item.label}" />`
+        : `<div class="img-placeholder">
+            <svg width="40" height="40" fill="none" stroke="#555" stroke-width="1.5" viewBox="0 0 24 24">
+              <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+              <path d="M21 15l-5-5L5 21"/>
+            </svg>
+            <span>No image uploaded</span>
+           </div>`
+      }
+      <div class="img-info">
+        <div class="img-label">${item.label}</div>
+        <div class="img-url" id="url-${item.id}">${item.url ? item.url : 'No image set'}</div>
+        <div class="img-actions">
+          <button class="btn-upload" onclick="triggerUpload('${item.id}')">Upload Image</button>
+          ${item.url ? `<button class="btn-remove" onclick="removeImage('${item.id}')">Remove</button>` : ''}
+        </div>
+      </div>
+    </div>
+  `).join('')
+}
+
+function triggerUpload(id) {
+  currentUploadId = id
+  const input = document.getElementById('file-input')
+  input.value = ''
+  input.onchange = () => uploadImage(id, input.files[0])
+  input.click()
+}
+
+async function uploadImage(id, file) {
+  if (!file) return
+  const form = new FormData()
+  form.append('image', file)
+  toast('Uploading…')
+  const res = await fetch(`${API}/images/upload/${id}`, { method: 'POST', body: form })
+  const data = await res.json()
+  if (data.success) {
+    toast('Image updated successfully!')
+    loadImages()
+  } else {
+    toast(data.error || 'Upload failed', true)
+  }
+}
+
+async function removeImage(id) {
+  if (!confirm('Remove this image?')) return
+  const res = await fetch(`${API}/images/${id}`, { method: 'DELETE' })
+  const data = await res.json()
+  if (data.success) { toast('Image removed'); loadImages() }
+  else toast('Failed to remove', true)
+}
+
+// ── BANNERS ──
+async function loadBanners() {
+  const data = await fetch(`${API}/images`).then(r => r.json()).catch(() => null)
+  if (!data) return
+
+  const aboutIds = ['about-principal','about-chair','about-mission','about-governance','about-staff','about-ofsted','about-policies','about-pledge']
+  const educationIds = ['education','education-ges','education-cambridge']
+  const otherIds = ['pupil-support','leadership','information']
+
+  const all = data.innerPages || []
+  renderGrid('banner-about-grid',     all.filter(i => aboutIds.includes(i.id)))
+  renderGrid('banner-education-grid', all.filter(i => educationIds.includes(i.id)))
+  renderGrid('banner-other-grid',     all.filter(i => otherIds.includes(i.id)))
+}
+
+// ── NEWS ──
+let newsData = []
+
+async function loadNews() {
+  newsData = await fetch(`${API}/news`).then(r => r.json()).catch(() => [])
+  const tbody = document.getElementById('news-tbody')
+  tbody.innerHTML = newsData.map(a => `
+    <tr>
+      <td style="font-weight:600;color:#f3f4f6">${a.title}</td>
+      <td><span class="badge">${a.category}</span></td>
+      <td style="color:#9ca3af;font-size:12px">${a.date}</td>
+      <td style="display:flex;gap:8px">
+        <button class="btn-sm btn-green" onclick="editNews(${a.id})">Edit</button>
+        <button class="btn-sm btn-red"   onclick="deleteNews(${a.id})">Delete</button>
+      </td>
+    </tr>
+  `).join('')
+}
+
+function openNewsModal(article) {
+  document.getElementById('news-modal').classList.add('open')
+  if (article) {
+    document.getElementById('modal-title').textContent = 'Edit News Article'
+    document.getElementById('news-id').value      = article.id
+    document.getElementById('news-title').value   = article.title
+    document.getElementById('news-excerpt').value = article.excerpt
+    document.getElementById('news-content').value = article.content || ''
+    document.getElementById('news-category').value= article.category
+    document.getElementById('news-date').value    = article.date
+  } else {
+    document.getElementById('modal-title').textContent = 'Add News Article'
+    document.getElementById('news-id').value      = ''
+    document.getElementById('news-title').value   = ''
+    document.getElementById('news-excerpt').value = ''
+    document.getElementById('news-content').value = ''
+    document.getElementById('news-category').value= 'Achievement'
+    document.getElementById('news-date').value    = new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})
+  }
+}
+function closeNewsModal() { document.getElementById('news-modal').classList.remove('open') }
+function editNews(id) { openNewsModal(newsData.find(a => a.id === id)) }
+
+async function saveNews() {
+  const id = document.getElementById('news-id').value
+  const body = {
+    title:    document.getElementById('news-title').value,
+    excerpt:  document.getElementById('news-excerpt').value,
+    content:  document.getElementById('news-content').value,
+    category: document.getElementById('news-category').value,
+    date:     document.getElementById('news-date').value,
+  }
+  const url    = id ? `${API}/news/${id}` : `${API}/news`
+  const method = id ? 'PUT' : 'POST'
+  const res    = await fetch(url, { method, headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) })
+  if (res.ok) { toast('Article saved!'); closeNewsModal(); loadNews() }
+  else toast('Failed to save', true)
+}
+
+async function deleteNews(id) {
+  if (!confirm('Delete this article?')) return
+  const res = await fetch(`${API}/news/${id}`, { method: 'DELETE' })
+  if (res.ok) { toast('Article deleted'); loadNews() }
+  else toast('Failed to delete', true)
+}
+
+// ── CONTACTS ──
+let contactsData = []
+
+async function loadContacts() {
+  contactsData = await fetch(`${API}/contact`).then(r => r.json()).catch(() => [])
+  const tbody = document.getElementById('contacts-tbody')
+  if (!contactsData.length) {
+    tbody.innerHTML = '<tr><td colspan="5" style="color:#6b7280;text-align:center;padding:28px">No messages yet</td></tr>'
+    return
+  }
+  tbody.innerHTML = contactsData.map((m, i) => `
+    <tr onclick="openContact(${i})" style="cursor:pointer" onmouseenter="this.style.background='#1f1f1f'" onmouseleave="this.style.background=''">
+      <td style="font-weight:600;color:#f3f4f6">${m.name || '&mdash;'}</td>
+      <td style="color:#9ca3af">${m.email || '&mdash;'}</td>
+      <td style="color:#d1d5db;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${m.subject || '&mdash;'}</td>
+      <td style="color:#6b7280;font-size:12px">${m.receivedAt ? new Date(m.receivedAt).toLocaleString('en-GB', {day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) : m.date || '&mdash;'}</td>
+      <td style="color:#82c906;font-size:13px;font-weight:700">VIEW &rsaquo;</td>
+    </tr>
+  `).join('')
+}
+
+function openContact(i) {
+  const m = contactsData[i]
+  document.getElementById('contact-name').textContent    = m.name || '—'
+  document.getElementById('contact-email').textContent   = m.email || '—'
+  document.getElementById('contact-subject').textContent = m.subject || '—'
+  document.getElementById('contact-date').textContent    = m.receivedAt ? new Date(m.receivedAt).toLocaleString('en-GB', {day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}) : m.date || '—'
+  document.getElementById('contact-message').textContent = m.message || '—'
+  document.getElementById('contact-modal').classList.add('open')
+}
+function closeContact() { document.getElementById('contact-modal').classList.remove('open') }
+
+// ── LIVE CHAT ──
+let chatSessions = []
+let activeChatId = null
+let chatPollTimer = null
+
+function loadChatSessions() {
+  fetch(API + '/chat').then(function(r){ return r.json() }).catch(function(){ return [] }).then(function(data) {
+  chatSessions = data
+  var container = document.getElementById('chat-sessions')
+  if (!chatSessions.length) {
+    container.innerHTML = '<div style="padding:20px;color:#6b7280;font-size:12px;text-align:center">No conversations yet</div>'
+    return
+  }
+  var html = ''
+  for (var i = 0; i < chatSessions.length; i++) {
+    var s = chatSessions[i]
+    var hasCall = (s.status === 'call_requested' || (s.callRequest && s.callRequest.length > 0))
+    var bg = hasCall ? 'background:#1a1500;border-left:4px solid #f59e0b;' : (activeChatId === s.id ? 'background:#1f1f1f;border-left:3px solid #82c906;' : '')
+    var statusColor = hasCall ? '#f59e0b' : (s.status === 'pending' ? '#ef4444' : '#82c906')
+    var statusBg    = hasCall ? '#f59e0b22' : (s.status === 'pending' ? '#ef444422' : '#82c90622')
+    var statusLabel = hasCall ? '&#128222; Call Requested' : s.status
+    var msgCount = s.messages ? s.messages.length : 0
+    var dateStr = new Date(s.startedAt).toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})
+    var cardBg = hasCall
+      ? 'background:linear-gradient(135deg,rgba(245,158,11,.12),rgba(245,158,11,.04));border-left:3px solid #f59e0b;'
+      : (activeChatId === s.id ? 'background:linear-gradient(135deg,rgba(130,201,6,.12),rgba(130,201,6,.04));border-left:3px solid #82c906;' : 'border-left:3px solid transparent;')
+    html += '<div data-id="' + s.id + '" style="padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.05);transition:background .15s;' + cardBg + '">'
+    html += '<div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:6px">'
+    html += '<input type="checkbox" class="chat-checkbox" data-id="' + s.id + '" onclick="event.stopPropagation()" style="margin-top:3px;accent-color:#82c906;width:14px;height:14px;cursor:pointer;flex-shrink:0">'
+    html += '<div style="flex:1;min-width:0">'
+    html += '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">'
+    html += '<span style="font-weight:800;font-size:13px;color:#f3f4f6;text-transform:capitalize">' + s.name + '</span>'
+    html += '<span style="font-size:10px;padding:2px 8px;border-radius:20px;font-weight:700;background:' + statusBg + ';color:' + statusColor + '">' + statusLabel + '</span>'
+    html += '</div>'
+    html += '<div style="font-size:11px;color:#6b7280;margin-bottom:8px">&#128172; ' + msgCount + ' msg &bull; ' + dateStr + '</div>'
+    if (hasCall && s.callRequest) {
+      html += '<div style="font-size:12px;color:#f59e0b;font-weight:700;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.3);padding:5px 10px;border-radius:6px;margin-bottom:8px">&#128222; ' + s.callRequest + '</div>'
+    }
+    html += '<div style="display:flex;gap:8px">'
+    html += '<button onclick="event.stopPropagation();openChatSession(\'' + s.id + '\')" style="flex:1;background:linear-gradient(135deg,rgba(130,201,6,.2),rgba(130,201,6,.08));border:1px solid rgba(130,201,6,.35);color:#82c906;font-size:11px;font-weight:700;padding:6px 0;border-radius:7px;cursor:pointer">&#128172; Open</button>'
+    html += '<button onclick="event.stopPropagation();deleteChatSession(\'' + s.id + '\')" style="background:linear-gradient(135deg,rgba(239,68,68,.2),rgba(239,68,68,.08));border:1px solid rgba(239,68,68,.35);color:#f87171;font-size:11px;font-weight:700;padding:6px 14px;border-radius:7px;cursor:pointer">&#128465;</button>'
+    html += '</div>'
+    html += '</div></div></div>'
+  }
+  container.innerHTML = html
+  }) // end fetch.then
+}
+
+function deleteChatSession(id) {
+  var card = document.querySelector('[data-id="' + id + '"]')
+  if (!card) return
+  // Show inline confirm inside the card
+  var existing = card.querySelector('.delete-confirm')
+  if (existing) { existing.remove(); return }
+  var bar = document.createElement('div')
+  bar.className = 'delete-confirm'
+  bar.style.cssText = 'margin-top:8px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);border-radius:8px;padding:8px 10px;display:flex;align-items:center;justify-content:space-between;gap:8px'
+  bar.innerHTML = '<span style="font-size:11px;color:#f87171;font-weight:700">Delete this chat?</span>' +
+    '<div style="display:flex;gap:6px">' +
+    '<button onclick="confirmDeleteChat(\'' + id + '\')" style="background:#ef4444;border:none;color:#fff;font-size:11px;font-weight:800;padding:4px 12px;border-radius:5px;cursor:pointer">Yes, Delete</button>' +
+    '<button onclick="this.closest(\'.delete-confirm\').remove()" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#9ca3af;font-size:11px;font-weight:700;padding:4px 10px;border-radius:5px;cursor:pointer">Cancel</button>' +
+    '</div>'
+  card.appendChild(bar)
+}
+
+function confirmDeleteChat(id) {
+  fetch(API + '/chat/' + id, { method: 'DELETE' })
+    .then(function(r) { return r.json() })
+    .then(function() {
+      if (activeChatId === id) {
+        activeChatId = null
+        document.getElementById('chat-header').innerHTML = 'Select a conversation'
+        document.getElementById('chat-messages').innerHTML = ''
+      }
+      loadChatSessions()
+      // Show undo toast for 10 seconds
+      var t = document.getElementById('toast')
+      t.innerHTML = 'Deleted &nbsp;<button onclick="undoDeleteChat(\'' + id + '\')" style="background:#fff;color:#1a1a1a;border:none;font-weight:900;font-size:11px;padding:3px 10px;border-radius:4px;cursor:pointer;margin-left:6px">↩ UNDO</button>'
+      t.className = 'toast show'
+      var timer = setTimeout(function() {
+        t.className = 'toast'
+        // Permanently delete after 10s
+        fetch(API + '/chat/' + id + '/permanent', { method: 'DELETE' })
+      }, 10000)
+      t.dataset.timer = timer
+    })
+    .catch(function() { toast('Failed to delete', true) })
+}
+
+function undoDeleteChat(id) {
+  var t = document.getElementById('toast')
+  clearTimeout(Number(t.dataset.timer))
+  t.className = 'toast'
+  fetch(API + '/chat/' + id + '/restore', { method: 'POST' })
+    .then(function(r) { return r.json() })
+    .then(function() {
+      toast('Conversation restored!')
+      loadChatSessions()
+    })
+}
+
+function selectAllChats() {
+  var boxes = document.querySelectorAll('.chat-checkbox')
+  var allChecked = Array.from(boxes).every(function(b) { return b.checked })
+  boxes.forEach(function(b) { b.checked = !allChecked })
+}
+
+function deleteSelectedChats() {
+  var boxes = document.querySelectorAll('.chat-checkbox:checked')
+  if (!boxes.length) { toast('No conversations selected', true); return }
+  var ids = Array.from(boxes).map(function(b) { return b.getAttribute('data-id') })
+  var done = 0
+  ids.forEach(function(id) {
+    fetch(API + '/chat/' + id, { method: 'DELETE' }).then(function() {
+      done++
+      if (done === ids.length) {
+        activeChatId = null
+        document.getElementById('chat-header').innerHTML = 'Select a conversation'
+        document.getElementById('chat-messages').innerHTML = ''
+        toast(done + ' conversation(s) deleted')
+        loadChatSessions()
+      }
+    })
+  })
+}
+
+function openChatSession(id) {
+  activeChatId = id
+  const s = chatSessions.find(c => c.id === id)
+  if (!s) return
+
+  var hasCall = (s.status === 'call_requested' || (s.callRequest && s.callRequest.length > 0))
+  var headerHtml = '<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">'
+  headerHtml += '<span style="color:#82c906;font-weight:700;font-size:15px">' + s.name + '</span>'
+  headerHtml += '<span style="font-size:11px;color:#6b7280">Started ' + new Date(s.startedAt).toLocaleString('en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}) + '</span>'
+  if (hasCall) {
+    headerHtml += '<span style="background:#f59e0b;color:#1a1a1a;font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px">&#128222; CALL REQUESTED</span>'
+  }
+  headerHtml += '</div>'
+  if (s.callRequest) {
+    headerHtml += '<div style="background:#1a1500;border:1px solid #f59e0b;border-radius:8px;padding:10px 14px;margin-top:10px;font-size:14px;color:#f59e0b;font-weight:700">&#128222; Contact Info: ' + s.callRequest + '</div>'
+  }
+  document.getElementById('chat-header').innerHTML = headerHtml
+
+  renderChatMessages(s.messages)
+  loadChatSessions()
+
+  // Poll for new messages every 5s
+  clearInterval(chatPollTimer)
+  chatPollTimer = setInterval(async () => {
+    const msgs = await fetch(`${API}/chat/${id}/messages`).then(r=>r.json()).catch(()=>null)
+    if (msgs) renderChatMessages(msgs)
+  }, 5000)
+}
+
+function renderChatMessages(messages) {
+  const box = document.getElementById('chat-messages')
+  box.innerHTML = messages.map(m => `
+    <div style="display:flex;justify-content:${m.from==='user'?'flex-start':'flex-end'}">
+      <div style="max-width:70%;padding:9px 13px;font-size:13px;line-height:1.5;
+        border-radius:${m.from==='user'?'12px 12px 12px 2px':'12px 12px 2px 12px'};
+        background:${m.from==='user'?'#1e1e1e':m.from==='staff'?'#14451a':'#1a3d0f'};
+        color:${m.from==='user'?'#d1d5db':m.from==='staff'?'#86efac':'#a3d977'};border-left:3px solid ${m.from==='user'?'transparent':m.from==='staff'?'#22c55e':'#4a7c1f'}">
+        ${m.from==='staff'?'<div style="font-size:10px;font-weight:700;margin-bottom:3px;opacity:.8">YOU (Staff)</div>':''}
+        ${m.from==='bot'?'<div style="font-size:10px;font-weight:700;margin-bottom:3px;opacity:.8">BOT</div>':''}
+        ${m.text}
+        <div style="font-size:10px;margin-top:4px;opacity:.6">${new Date(m.time).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}</div>
+      </div>
+    </div>
+  `).join('')
+  box.scrollTop = box.scrollHeight
+}
+
+async function sendChatReply() {
+  if (!activeChatId) return toast('Select a conversation first', true)
+  const input = document.getElementById('chat-reply-input')
+  const text = input.value.trim()
+  if (!text) return
+  input.value = ''
+  const res = await fetch(`${API}/chat/${activeChatId}/reply`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text })
+  })
+  if (res.ok) {
+    toast('Reply sent!')
+    const s = chatSessions.find(c => c.id === activeChatId)
+    if (s) { s.messages.push({ from:'staff', text, time: new Date().toISOString() }); renderChatMessages(s.messages) }
+  } else {
+    toast('Failed to send reply', true)
+  }
+}
+
+// ── AUTH CHECK ──
+if (!localStorage.getItem('abofra-admin')) {
+  window.location.href = '/admin/login'
+}
+
+// ── LOGOUT ──
+document.querySelector('.logout a').addEventListener('click', function(e) {
+  e.preventDefault()
+  localStorage.removeItem('abofra-admin')
+  window.location.href = '/admin/login'
+})
+
+// ── INIT ──
+loadImages()
+</script>
+</body>
+</html>

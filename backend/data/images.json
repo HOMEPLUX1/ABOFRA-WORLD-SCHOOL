@@ -1,0 +1,137 @@
+{
+  "hero": [
+    {
+      "id": "hero-0",
+      "label": "Hero Slide 1 – EXCELLENCE",
+      "url": "/uploads/hero-0-1782240580939.jpg"
+    },
+    {
+      "id": "hero-1",
+      "label": "Hero Slide 2 – INTEGRITY",
+      "url": "/uploads/hero-1-1782240614772.jpg"
+    },
+    {
+      "id": "hero-2",
+      "label": "Hero Slide 3 – INNOVATION",
+      "url": "/uploads/hero-2-1782240606707.jpg"
+    },
+    {
+      "id": "hero-3",
+      "label": "Hero Slide 4 – COMMUNITY",
+      "url": "/uploads/hero-3-1782240594348.jpg"
+    }
+  ],
+  "innerPages": [
+    {
+      "id": "about-principal",
+      "label": "About – Welcome from Principal",
+      "url": "/uploads/about-principal-1782241784311.jpg"
+    },
+    {
+      "id": "about-chair",
+      "label": "About – Welcome from Chair",
+      "url": null
+    },
+    {
+      "id": "about-mission",
+      "label": "About – Mission, Vision & Values",
+      "url": null
+    },
+    {
+      "id": "about-governance",
+      "label": "About – Governance",
+      "url": null
+    },
+    {
+      "id": "about-staff",
+      "label": "About – Staff",
+      "url": null
+    },
+    {
+      "id": "about-ofsted",
+      "label": "About – Ofsted",
+      "url": null
+    },
+    {
+      "id": "about-policies",
+      "label": "About – Policies & Publications",
+      "url": null
+    },
+    {
+      "id": "about-pledge",
+      "label": "About – Pledge to Parents",
+      "url": null
+    },
+    {
+      "id": "education",
+      "label": "Education Section",
+      "url": null
+    },
+    {
+      "id": "education-ges",
+      "label": "Education – G.E.S Page Banner",
+      "url": null
+    },
+    {
+      "id": "education-cambridge",
+      "label": "Education – Cambridge Page Banner",
+      "url": "/uploads/education-cambridge-1782320911546.png"
+    },
+    {
+      "id": "pupil-support",
+      "label": "Pupil Support Section",
+      "url": null
+    },
+    {
+      "id": "leadership",
+      "label": "Leadership Section",
+      "url": null
+    },
+    {
+      "id": "information",
+      "label": "Information Section",
+      "url": null
+    }
+  ],
+  "featureCards": [
+    {
+      "id": "card-pledge",
+      "label": "Feature Card – Pledge of Excellence",
+      "url": null
+    },
+    {
+      "id": "card-leaders",
+      "label": "Feature Card – Inspiring Leaders",
+      "url": null
+    },
+    {
+      "id": "card-admissions",
+      "label": "Feature Card – Admissions",
+      "url": null
+    }
+  ],
+  "logos": [
+    {
+      "id": "logo-main",
+      "label": "Main School Logo (circle badge)",
+      "url": null
+    },
+    {
+      "id": "logo-name",
+      "label": "School Name Image",
+      "url": null
+    }
+  ],
+  "curriculumLogos": [
+    {
+      "id": "logo-ges",
+      "label": "G.E.S Logo",
+      "url": "/uploads/logo-ges-1782317433445.png"
+    },
+    {
+      "id": "logo-cambridge",
+      "label": "Cambridge Logo",
+      "url": "/uploads/logo-cambridge-1782317283535.png"
+    }
+  ]
+}

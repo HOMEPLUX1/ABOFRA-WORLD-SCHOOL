@@ -1,0 +1,56 @@
+[
+  {
+    "id": 1,
+    "title": "Abofra Students Win Regional Science Fair",
+    "excerpt": "Our Year 9 science team brought home gold at the regional science competition, impressing judges with their innovative water purification project.",
+    "content": "We are incredibly proud of our Year 9 students who competed in the Regional Science Fair and came home with the top prize. The team developed a low-cost water purification system using locally sourced materials — a project that impressed judges for both its innovation and its social impact. The students will now represent our region at the national competition in August. Congratulations to the team and their science teacher, Mr. Asante, for their dedication and hard work.",
+    "date": "June 10, 2026",
+    "category": "Achievement",
+    "emoji": "🏆"
+  },
+  {
+    "id": 2,
+    "title": "New Computer Lab Opens for All Students",
+    "excerpt": "We are thrilled to unveil our brand-new state-of-the-art computer laboratory, equipped with 60 modern workstations for coding and digital learning.",
+    "content": "Abofra World School has officially opened its new computer laboratory, a milestone investment in our students' digital future. The lab features 60 high-speed workstations, two dedicated servers, and broadband internet connectivity. Students across all year groups will have scheduled access for ICT lessons, coding clubs, and independent digital projects. We thank our Parent-Teacher Association and corporate partners for making this facility possible.",
+    "date": "May 28, 2026",
+    "category": "Facilities",
+    "emoji": "💻"
+  },
+  {
+    "id": 3,
+    "title": "Annual Cultural Day Celebrates Diversity",
+    "excerpt": "Students and staff came together in a vibrant celebration of Ghana's rich cultural heritage, showcasing traditional dances, food, and music.",
+    "content": "Our Annual Cultural Day 2026 was a joyous celebration of the diverse backgrounds that make up the Abofra family. Students arrived in traditional attire from across Ghana's regions and beyond. The day featured cultural displays, traditional drumming, storytelling, and a spectacular food fair prepared by our school community. Cultural Day reminds us that our differences are our greatest strength, and that unity in diversity is at the heart of who we are.",
+    "date": "May 15, 2026",
+    "category": "Events",
+    "emoji": "🎉"
+  },
+  {
+    "id": 4,
+    "title": "Reading Week 2026 Launches Across All Classes",
+    "excerpt": "This year's Reading Week theme is 'Stories that Change the World.' Every class is exploring literature from African authors and beyond.",
+    "content": "Reading Week is one of the most anticipated events in our school calendar, and 2026 is no exception. This year's theme, 'Stories that Change the World,' challenges students to explore how books can inspire action, empathy, and positive change. The week includes daily read-alouds, an author Q&A session, a classroom library competition, and a book swap fair. We encourage all parents to support reading at home this week and beyond.",
+    "date": "Apr 30, 2026",
+    "category": "Academic",
+    "emoji": "📚"
+  },
+  {
+    "id": 5,
+    "title": "Parent-Teacher Forum a Resounding Success",
+    "excerpt": "Over 400 parents attended our termly forum, strengthening the partnership between home and school for student success.",
+    "content": "We were overwhelmed by the turnout at our Spring Term Parent-Teacher Forum, with over 400 families joining us for an evening of dialogue, feedback, and celebration. Parents heard presentations on our new assessment framework, met with subject teachers, and contributed ideas to our School Improvement Plan. The partnership between parents and the school is the backbone of every child's success, and we are grateful for the incredible support we continue to receive from our families.",
+    "date": "Apr 12, 2026",
+    "category": "Events",
+    "emoji": "👨‍👩‍👧"
+  },
+  {
+    "id": 6,
+    "title": "Football Team Qualifies for National Championship",
+    "excerpt": "After a thrilling regional tournament, our boys' football team has earned a place in the national schools championship finals.",
+    "content": "In a nail-biting series of matches, the Abofra World School boys' football team has qualified for the National Schools Football Championship. The team went unbeaten through the regional qualifiers, winning five matches and drawing one. Captain Emmanuel Osei scored the decisive goal in the final qualifier. The national championship will be held in September. We wish the squad, their coach Mr. Boateng, and all the supporters every success. The whole school is behind you!",
+    "date": "Mar 22, 2026",
+    "category": "Achievement",
+    "emoji": "⚽"
+  }
+]
