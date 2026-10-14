@@ -162,7 +162,7 @@ export default function CheckinKiosk() {
           {error && <div style={{ background:'rgba(239,68,68,.15)', border:'1px solid rgba(239,68,68,.3)', borderRadius:10, padding:'12px 16px', marginBottom:16, color:'#fca5a5', fontSize:14, textAlign:'center' }}>❌ {error}</div>}
 
           {/* Two panels */}
-          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:20 }}>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(280px, 1fr))', gap:20 }}>
 
             {/* LEFT — QR Scanner */}
             <div style={{ background:'rgba(255,255,255,.06)', border:`2px solid ${scanActive?accent:'rgba(255,255,255,.12)'}`, borderRadius:20, padding:28, display:'flex', flexDirection:'column', alignItems:'center', gap:16, transition:'border-color .3s', cursor: scanActive?'default':'pointer' }}
