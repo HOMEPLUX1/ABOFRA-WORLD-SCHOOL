@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect, useRef, useCallback } from 'react'
 
-const API = 'http://localhost:5002/api/sms'
+const API = '/api/sms'
 
 type Child = { id: number; name: string; student_id: string; class_name: string; photo?: string }
 type ParentData = { id: number; name: string; parent_id: string }

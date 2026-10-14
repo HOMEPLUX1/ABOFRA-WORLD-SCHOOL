@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect, useRef, FormEvent } from 'react'
 
-const API = 'http://localhost:5002'
+const API = ''
 
 interface Message {
   from: 'user' | 'bot' | 'staff'

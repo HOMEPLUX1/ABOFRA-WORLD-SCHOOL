@@ -1,7 +1,7 @@
 ﻿'use client'
 import { useEffect, useState } from 'react'
 
-const API = 'http://localhost:5002'
+const API = ''
 
 interface InnerPageHeroProps {
   topText: string

@@ -13,7 +13,7 @@ const slides = [
   { word: 'PERSEVERANCE',  color: '#2a2a1a', id: 'hero-3' },
 ]
 
-const API = 'http://localhost:5002'
+const API = ''
 
 export default function Hero() {
   const [current, setCurrent]     = useState(0)
@@ -50,7 +50,7 @@ export default function Hero() {
   }, [current])
 
   return (
-    <section className="relative w-full overflow-hidden" style={{ height: '70vh', minHeight: 480 }}>
+    <section className="relative w-full overflow-hidden" style={{ height: '60vw', minHeight: 280, maxHeight: 600 }}>
 
       {/* Background slides */}
       {slides.map((slide, i) => (

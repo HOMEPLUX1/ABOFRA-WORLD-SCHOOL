@@ -2,7 +2,7 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
-const API = 'http://localhost:5002'
+const API = ''
 
 const cards = [
   {

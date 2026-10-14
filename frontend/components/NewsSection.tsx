@@ -22,7 +22,7 @@ export default function NewsSection() {
   const [articles, setArticles] = useState<Article[]>(fallback)
 
   useEffect(() => {
-    axios.get('http://localhost:5002/api/news')
+    axios.get('/api/news')
       .then(res => { if (res.data?.length) setArticles(res.data) })
       .catch(() => {})
   }, [])

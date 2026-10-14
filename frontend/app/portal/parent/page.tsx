@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 
-const API = 'http://localhost:5002/api/portal'
+const API = '/api/portal'
 
 const s: Record<string, React.CSSProperties> = {
   page:  { minHeight: '100vh', background: '#f0f4f8', fontFamily: "'Segoe UI',sans-serif" },
@@ -172,7 +172,7 @@ export default function ParentPortal() {
               </div>
               <button style={s.btn} onClick={loadScores}>Load Results</button>
               {scores && child && (
-                <a href={`http://localhost:5002/api/fees/reportcard/${child.id}?term=${encodeURIComponent(term)}&year=${year}`} target="_blank" style={{ ...s.btn, textDecoration:'none', background:'#2d7d32' }}>📄 Download Report Card</a>
+                <a href={`/api/fees/reportcard/${child.id}?term=${encodeURIComponent(term)}&year=${year}`} target="_blank" style={{ ...s.btn, textDecoration:'none', background:'#2d7d32' }}>📄 Download Report Card</a>
               )}
             </div>
             {scores ? (
@@ -232,7 +232,7 @@ export default function ParentPortal() {
                         <span style={{ ...s.badge, background:f.status==='paid'?'#c6f6d5':'#fefcbf', color:f.status==='paid'?'#276749':'#744210' }}>{f.status.toUpperCase()}</span>
                       </td>
                       <td style={{ padding:'10px 14px' }}>
-                        {f.status==='paid' && <a href={`http://localhost:5002/api/fees/${f.id}/receipt`} target="_blank" style={{ ...s.btn, fontSize:12, padding:'5px 12px', textDecoration:'none' }}>📄 PDF</a>}
+                        {f.status==='paid' && <a href={`/api/fees/${f.id}/receipt`} target="_blank" style={{ ...s.btn, fontSize:12, padding:'5px 12px', textDecoration:'none' }}>📄 PDF</a>}
                       </td>
                     </tr>
                   )) : <tr><td colSpan={6} style={{ textAlign:'center', color:'#999', padding:20, fontSize:14 }}>No fee records yet.</td></tr>}

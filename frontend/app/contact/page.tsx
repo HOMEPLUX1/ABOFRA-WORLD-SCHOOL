@@ -17,7 +17,7 @@ export default function ContactPage() {
     e.preventDefault()
     setStatus('sending')
     try {
-      await axios.post('http://localhost:5002/api/contact', form)
+      await axios.post('/api/contact', form)
       setStatus('sent')
       setForm({ name: '', email: '', subject: '', message: '' })
     } catch {

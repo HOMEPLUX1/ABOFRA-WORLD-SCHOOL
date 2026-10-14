@@ -68,7 +68,7 @@ const mainLinks = [
 const topLinks = [
   { label: 'Home',    href: '/' },
   { label: 'News',    href: '/news' },
-  { label: 'Portal',  href: 'http://localhost:5002/admin' },
+  { label: 'Portal',  href: '/admin' },
   { label: 'Contact', href: '/contact' },
 ]
 
@@ -110,18 +110,19 @@ export default function Navbar() {
 
       {/* ── WHITE MAIN NAV ── */}
       <div className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 flex items-center justify-between" style={{ height: 122 }}>
+        <div className="max-w-7xl mx-auto px-4 flex items-center justify-between" style={{ height: 80 }}>
 
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 shrink-0">
+          <Link href="/" className="flex items-center gap-2 shrink-0">
             {/* Main school logo */}
-            <img src="/logo.png" alt="Abofra World School Logo" style={{ width: 110, height: 110, objectFit: 'contain' }} />
+            <img src="/logo.png" alt="Abofra World School Logo" style={{ width: 65, height: 65, objectFit: 'contain' }} className="md:w-[90px] md:h-[90px]" />
             {/* Divider line + school name image */}
-            <div className="flex items-center" style={{ height: '70px', borderLeft: '3px solid #d1d5db', paddingLeft: '8px' }}>
+            <div className="flex items-center" style={{ height: '50px', borderLeft: '3px solid #d1d5db', paddingLeft: '8px' }}>
               <img
                 src="/school-name.png"
                 alt="Abofra World School"
-                style={{ height: 142, width: 'auto', objectFit: 'contain' }}
+                style={{ height: 90, width: 'auto', objectFit: 'contain' }}
+                className="md:h-[120px]"
               />
             </div>
           </Link>

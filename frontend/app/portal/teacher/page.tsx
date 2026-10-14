@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 
-const API = 'http://localhost:5002/api/portal'
+const API = '/api/portal'
 
 const s: Record<string, React.CSSProperties> = {
   page:   { minHeight: '100vh', background: '#f0f4f8', fontFamily: "'Segoe UI',sans-serif" },
