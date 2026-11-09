@@ -16,7 +16,7 @@ const mainLinks = [
     ],
   },
   {
-    label: 'EDUCATION',
+    label: 'ACADEMICS',
     href: '/education',
     children: [
       { label: 'Curriculum Overview',     href: '/education/curriculum' },
@@ -140,7 +140,7 @@ export default function Navbar() {
                   href={link.href}
                   className="px-4 text-base font-bold tracking-wide transition-colors"
                   style={{
-                    color: link.label === 'EDUCATION' ? '#206802' : activeDropdown === link.label ? '#82c906' : '#444',
+                    color: link.label === 'ACADEMICS' ? '#206802' : activeDropdown === link.label ? '#82c906' : '#444',
                     display: 'flex',
                     alignItems: 'center',
                     height: '100%',
