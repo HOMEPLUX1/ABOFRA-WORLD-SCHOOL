@@ -40,7 +40,7 @@ export default function ExtracurricularPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
           {activities.map((a, i) => (
             <div key={i} className="flex gap-4 items-start p-4 rounded-xl border border-gray-200" style={{ backgroundColor: '#fafafa' }}>
-              <span className="text-3xl shrink-0">{a.icon}</span>
+              <span className="text-3xl shrink-0 emoji-icon">{a.icon}</span>
               <div>
                 <p className="font-extrabold text-sm text-gray-800 uppercase">{a.name}</p>
                 <p className="text-xs text-gray-500 mt-0.5">{a.desc}</p>
