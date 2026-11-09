@@ -1,58 +1,56 @@
-import InnerPageHero from '@/components/InnerPageHero'
-import SectionLayout from '@/components/SectionLayout'
-
-const links = [
-  { label: 'Extracurricular Activities', href: '/student-life/extracurricular' },
-  { label: 'Sports & Games',             href: '/student-life/sports' },
-  { label: 'Arts & Culture',             href: '/student-life/arts' },
-  { label: 'Clubs & Societies',          href: '/student-life/clubs' },
-  { label: 'Gallery',                    href: '/student-life/gallery' },
-  { label: 'Student Council',            href: '/leadership/student-council' },
-]
+import StudentLifeLayout from '@/components/StudentLifeLayout'
 
 const activities = [
-  { icon: '⚽', name: 'Football', desc: 'Competitive and recreational football for all year groups' },
-  { icon: '🏀', name: 'Basketball', desc: 'Training sessions and inter-school competitions' },
-  { icon: '🎨', name: 'Visual Arts', desc: 'Drawing, painting, sculpture and mixed media' },
-  { icon: '🎭', name: 'Drama & Theatre', desc: 'Annual school play and performance arts workshops' },
-  { icon: '🎵', name: 'Music', desc: 'Choir, instrumental lessons and school band' },
-  { icon: '💻', name: 'Coding Club', desc: 'Programming, web design and robotics for all ages' },
-  { icon: '📚', name: 'Debate Club', desc: 'Public speaking, critical thinking and argumentation' },
-  { icon: '♟️', name: 'Chess Club', desc: 'Strategy, problem solving and tournaments' },
-  { icon: '🌍', name: 'Environment Club', desc: 'Sustainability projects and community initiatives' },
-  { icon: '📰', name: 'School Magazine', desc: 'Writing, photography and publishing the school newsletter' },
-  { icon: '🏃', name: 'Athletics', desc: 'Track and field events, annual sports day competitions' },
-  { icon: '🎤', name: 'Public Speaking', desc: 'Oratory competitions and communication skills' },
+  { name: 'Football',       desc: 'Competitive and recreational football for all year groups',         color: '#34d399' },
+  { name: 'Basketball',     desc: 'Training sessions and inter-school competitions',                   color: '#60a5fa' },
+  { name: 'Visual Arts',    desc: 'Drawing, painting, sculpture and mixed media',                      color: '#f59e0b' },
+  { name: 'Drama & Theatre',desc: 'Annual school play and performance arts workshops',                 color: '#f472b6' },
+  { name: 'Music',          desc: 'Choir, instrumental lessons and school band',                       color: '#a78bfa' },
+  { name: 'Coding Club',    desc: 'Programming, web design and robotics for all ages',                 color: '#34d399' },
+  { name: 'Debate Club',    desc: 'Public speaking, critical thinking and argumentation',              color: '#fb923c' },
+  { name: 'Chess Club',     desc: 'Strategy, problem solving and tournaments',                         color: '#60a5fa' },
+  { name: 'Environment Club',desc: 'Sustainability projects and community initiatives',                color: '#4ade80' },
+  { name: 'School Magazine',desc: 'Writing, photography and publishing the school newsletter',         color: '#f472b6' },
+  { name: 'Athletics',      desc: 'Track and field events, annual sports day competitions',            color: '#fbbf24' },
+  { name: 'Public Speaking',desc: 'Oratory competitions and communication skills',                    color: '#a78bfa' },
 ]
 
 export default function ExtracurricularPage() {
   return (
-    <>
-      <InnerPageHero topText="STUDENT LIFE" mainText="EXTRACURRICULAR ACTIVITIES" bgColor="#0a1a2a" imageId="student-life" />
-      <SectionLayout sidebarLinks={links} breadcrumb={[{ label: 'Student Life', href: '/student-life' }, { label: 'Extracurricular Activities' }]}>
-        <h2 className="text-xl font-extrabold uppercase mb-3" style={{ color: '#206802' }}>Beyond the Classroom</h2>
-        <p className="text-gray-700 leading-relaxed mb-6">
-          At Abofra World School, we believe education goes far beyond the classroom. Our rich
-          extracurricular programme gives every student the opportunity to discover their passions,
-          develop new skills, build friendships and grow as well-rounded individuals.
-        </p>
+    <StudentLifeLayout
+      title="Beyond the Classroom"
+      subtitle="Discover your passion, build friendships and grow as a well-rounded individual through our rich extracurricular programme."
+      accent="#a78bfa"
+    >
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 16, marginBottom: 32 }}>
+        {activities.map((a, i) => (
+          <div key={i} style={{
+            background: 'rgba(255,255,255,.05)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            border: `1px solid rgba(255,255,255,.1)`,
+            borderTop: `3px solid ${a.color}`,
+            borderRadius: 16,
+            padding: '20px 20px',
+            transition: 'transform .2s, box-shadow .2s',
+          }}>
+            <p style={{ fontWeight: 800, fontSize: 14, color: a.color, marginBottom: 6, textTransform: 'uppercase', letterSpacing: '.06em' }}>{a.name}</p>
+            <p style={{ fontSize: 13, color: 'rgba(255,255,255,.6)', lineHeight: 1.6 }}>{a.desc}</p>
+          </div>
+        ))}
+      </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-          {activities.map((a, i) => (
-            <div key={i} className="flex gap-4 items-start p-4 rounded-xl border border-gray-200" style={{ backgroundColor: '#fafafa' }}>
-              <div>
-                <p className="font-extrabold text-sm text-gray-800 uppercase">{a.name}</p>
-                <p className="text-xs text-gray-500 mt-0.5">{a.desc}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="p-5 rounded-xl" style={{ backgroundColor: '#f0f7e6', borderLeft: '4px solid #82c906' }}>
-          <p className="font-bold text-gray-800 mb-1">How to Join</p>
-          <p className="text-sm text-gray-600">All students are encouraged to join at least one club or activity. Sign-ups take place at the start of each term. Speak to your class teacher or the school office for details.</p>
-        </div>
-      </SectionLayout>
-    </>
+      <div style={{
+        background: 'rgba(167,139,250,.1)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        border: '1px solid rgba(167,139,250,.25)',
+        borderRadius: 20,
+        padding: '24px 28px',
+      }}>
+        <p style={{ fontWeight: 800, color: '#a78bfa', marginBottom: 8, fontSize: 14, textTransform: 'uppercase', letterSpacing: '.08em' }}>How to Join</p>
+        <p style={{ fontSize: 13, color: 'rgba(255,255,255,.65)', lineHeight: 1.7 }}>All students are encouraged to join at least one club or activity. Sign-ups take place at the start of each term. Speak to your class teacher or the school office for details.</p>
+      </div>
+    </StudentLifeLayout>
   )
 }

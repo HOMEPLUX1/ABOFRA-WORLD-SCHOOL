@@ -1,48 +1,49 @@
-import InnerPageHero from '@/components/InnerPageHero'
-import SectionLayout from '@/components/SectionLayout'
+import StudentLifeLayout from '@/components/StudentLifeLayout'
 
-const links = [
-  { label: 'Extracurricular Activities', href: '/student-life/extracurricular' },
-  { label: 'Sports & Games',             href: '/student-life/sports' },
-  { label: 'Arts & Culture',             href: '/student-life/arts' },
-  { label: 'Clubs & Societies',          href: '/student-life/clubs' },
-  { label: 'Gallery',                    href: '/student-life/gallery' },
-  { label: 'Student Council',            href: '/leadership/student-council' },
+const artForms = [
+  { title: 'Visual Arts',    desc: 'Drawing, painting, sculpture, textile arts and digital design',      color: '#f59e0b' },
+  { title: 'Music',          desc: 'School choir, instrumental tuition and annual music concert',        color: '#a78bfa' },
+  { title: 'Drama & Theatre',desc: 'Annual school play, improvisation and performance workshops',        color: '#f472b6' },
+  { title: 'Dance',          desc: 'Traditional Ghanaian dance, contemporary and choreography',          color: '#fb923c' },
+  { title: 'Photography',    desc: 'Visual storytelling and school magazine photography',                color: '#34d399' },
+  { title: 'Cultural Day',   desc: 'Annual celebration of Ghana\'s rich cultural heritage',              color: '#60a5fa' },
 ]
 
 export default function ArtsPage() {
   return (
-    <>
-      <InnerPageHero topText="STUDENT LIFE" mainText="ARTS & CULTURE" bgColor="#0a1a2a" imageId="student-life" />
-      <SectionLayout sidebarLinks={links} breadcrumb={[{ label: 'Student Life', href: '/student-life' }, { label: 'Arts & Culture' }]}>
-        <h2 className="text-xl font-extrabold uppercase mb-3" style={{ color: '#206802' }}>Creativity at the Core</h2>
-        <p className="text-gray-700 leading-relaxed mb-5">
-          The arts are central to life at Abofra World School. We celebrate creativity, self-expression
-          and cultural identity through a vibrant programme of visual arts, music, drama and cultural
-          celebrations throughout the year.
-        </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-          {[
-            { icon: '🎨', title: 'Visual Arts', desc: 'Drawing, painting, sculpture, textile arts and digital design' },
-            { icon: '🎵', title: 'Music', desc: 'School choir, instrumental tuition and annual music concert' },
-            { icon: '🎭', title: 'Drama & Theatre', desc: 'Annual school play, improvisation and performance workshops' },
-            { icon: '💃', title: 'Dance', desc: 'Traditional Ghanaian dance, contemporary and choreography' },
-            { icon: '📸', title: 'Photography', desc: 'Visual storytelling and school magazine photography' },
-            { icon: '🌍', title: 'Cultural Day', desc: 'Annual celebration of Ghana\'s rich cultural heritage' },
-          ].map((item, i) => (
-            <div key={i} className="flex gap-4 items-start p-4 rounded-xl border border-gray-200" style={{ backgroundColor: '#fafafa' }}>
-              <div>
-                <p className="font-extrabold text-sm text-gray-800 uppercase">{item.title}</p>
-                <p className="text-xs text-gray-500 mt-0.5">{item.desc}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="p-5 rounded-xl" style={{ backgroundColor: '#f0f7e6', borderLeft: '4px solid #82c906' }}>
-          <p className="font-bold text-gray-800 mb-1">Annual Cultural Day</p>
-          <p className="text-sm text-gray-600">Every year we hold a vibrant Cultural Day where students celebrate Ghana&apos;s diverse heritage through traditional dress, food, music and dance. It is one of the most anticipated events in the school calendar.</p>
-        </div>
-      </SectionLayout>
-    </>
+    <StudentLifeLayout
+      title="Arts & Culture"
+      subtitle="Creativity, self-expression and cultural identity are celebrated through a vibrant programme of visual arts, music, drama and cultural events."
+      accent="#f59e0b"
+    >
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 16, marginBottom: 24 }}>
+        {artForms.map((item, i) => (
+          <div key={i} style={{
+            background: 'rgba(255,255,255,.05)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            border: '1px solid rgba(255,255,255,.1)',
+            borderTop: `3px solid ${item.color}`,
+            borderRadius: 16,
+            padding: '22px',
+          }}>
+            <p style={{ fontWeight: 800, fontSize: 14, color: item.color, marginBottom: 6, textTransform: 'uppercase', letterSpacing: '.06em' }}>{item.title}</p>
+            <p style={{ fontSize: 13, color: 'rgba(255,255,255,.6)', lineHeight: 1.6 }}>{item.desc}</p>
+          </div>
+        ))}
+      </div>
+
+      <div style={{
+        background: 'linear-gradient(135deg, rgba(245,158,11,.12), rgba(251,146,60,.08))',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        border: '1px solid rgba(245,158,11,.25)',
+        borderRadius: 20,
+        padding: '28px',
+      }}>
+        <p style={{ fontWeight: 800, color: '#f59e0b', marginBottom: 8, fontSize: 14, textTransform: 'uppercase', letterSpacing: '.08em' }}>Annual Cultural Day</p>
+        <p style={{ fontSize: 13, color: 'rgba(255,255,255,.65)', lineHeight: 1.7 }}>Every year we hold a vibrant Cultural Day where students celebrate Ghana&apos;s diverse heritage through traditional dress, food, music and dance. It is one of the most anticipated events in the school calendar.</p>
+      </div>
+    </StudentLifeLayout>
   )
 }
