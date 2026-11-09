@@ -51,6 +51,18 @@ const mainLinks = [
     ],
   },
   {
+    label: 'STUDENT LIFE',
+    href: '/student-life',
+    children: [
+      { label: 'Extracurricular Activities', href: '/student-life/extracurricular' },
+      { label: 'Sports & Games',             href: '/student-life/sports' },
+      { label: 'Arts & Culture',             href: '/student-life/arts' },
+      { label: 'Clubs & Societies',          href: '/student-life/clubs' },
+      { label: 'Gallery',                    href: '/student-life/gallery' },
+      { label: 'Student Council',            href: '/leadership/student-council' },
+    ],
+  },
+  {
     label: 'INFORMATION',
     href: '/information',
     children: [
