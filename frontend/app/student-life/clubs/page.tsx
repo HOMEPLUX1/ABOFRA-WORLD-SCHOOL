@@ -11,14 +11,14 @@ const links = [
 ]
 
 const clubs = [
-  { icon: '💻', name: 'Coding & Robotics Club', day: 'Mondays', desc: 'Programming, web development and robotics challenges' },
-  { icon: '📚', name: 'Debate & Oratory Club', day: 'Tuesdays', desc: 'Public speaking, argumentation and inter-school debates' },
-  { icon: '♟️', name: 'Chess Club', day: 'Wednesdays', desc: 'Strategy, critical thinking and chess tournaments' },
-  { icon: '🌍', name: 'Environment & Green Club', day: 'Thursdays', desc: 'Sustainability projects and environmental awareness' },
-  { icon: '📰', name: 'School Magazine Club', day: 'Fridays', desc: 'Writing, editing, photography and publishing' },
-  { icon: '🔬', name: 'Science Club', day: 'Mondays', desc: 'Experiments, STEM projects and science fairs' },
-  { icon: '🎤', name: 'French Language Club', day: 'Wednesdays', desc: 'Conversational French, culture and exchange' },
-  { icon: '🤝', name: 'Community Service Club', day: 'Fridays', desc: 'Outreach projects and volunteering in the community' },
+  { icon: '💻', name: 'Coding & Robotics Club', desc: 'Programming, web development and robotics challenges' },
+  { icon: '📚', name: 'Debate & Oratory Club', desc: 'Public speaking, argumentation and inter-school debates' },
+  { icon: '♟️', name: 'Chess Club', desc: 'Strategy, critical thinking and chess tournaments' },
+  { icon: '🌍', name: 'Environment & Green Club', desc: 'Sustainability projects and environmental awareness' },
+  { icon: '📰', name: 'School Magazine Club', desc: 'Writing, editing, photography and publishing' },
+  { icon: '🔬', name: 'Science Club', desc: 'Experiments, STEM projects and science fairs' },
+  { icon: '🎤', name: 'French Language Club', desc: 'Conversational French, culture and exchange' },
+  { icon: '🤝', name: 'Community Service Club', desc: 'Outreach projects and volunteering in the community' },
 ]
 
 export default function ClubsPage() {
@@ -38,7 +38,6 @@ export default function ClubsPage() {
               <div className="flex-1">
                 <div className="flex items-center gap-3 flex-wrap">
                   <p className="font-extrabold text-sm text-gray-800">{club.name}</p>
-                  <span className="text-xs px-2 py-0.5 rounded-full font-semibold" style={{ backgroundColor: '#82c906', color: '#fff' }}>{club.day}</span>
                 </div>
                 <p className="text-xs text-gray-500 mt-0.5">{club.desc}</p>
               </div>
