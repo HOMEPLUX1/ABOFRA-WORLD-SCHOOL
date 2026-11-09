@@ -147,6 +147,7 @@
   <button class="tab-btn" onclick="switchTab('news')">&#128240; News</button>
   <button class="tab-btn" onclick="switchTab('contacts')">&#9993; Contact Messages</button>
   <button class="tab-btn" onclick="switchTab('chat')">&#128172; Live Chat</button>
+  <button class="tab-btn" onclick="switchTab('icons')">&#127968; Icons & Logos</button>
   <button class="tab-btn" onclick="switchTab('gallery')">&#128247; Gallery</button>
   <button class="tab-btn" onclick="switchTab('sms')">&#127979; School Portal</button>
 </div>
@@ -306,6 +307,13 @@
   </div>
 </div>
 
+<!-- ICONS & LOGOS TAB -->
+<div class="tab-panel" id="tab-icons">
+  <div class="section-title">Icons &amp; Logos — Live Site Brand Assets</div>
+  <p style="font-size:12px;color:#9ca3af;margin-bottom:24px">Upload a new image to instantly replace it on the live website. No rebuild needed.</p>
+  <div id="icons-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px"></div>
+</div>
+
 <!-- GALLERY TAB -->
 <div class="tab-panel" id="tab-gallery">
 
@@ -437,6 +445,7 @@ function switchTab(name) {
   if (name === 'contacts') loadContacts()
   if (name === 'chat') loadChatSessions()
   if (name === 'gallery') loadGallery()
+  if (name === 'icons') loadIcons()
 }
 
 // ── TOAST ──
@@ -819,6 +828,58 @@ async function sendChatReply() {
   } else {
     toast('Failed to send reply', true)
   }
+}
+
+// ── ICONS & LOGOS ──
+async function loadIcons() {
+  const icons = await fetch(`${API}/icons`).then(r => r.json()).catch(() => [])
+  const grid = document.getElementById('icons-grid')
+  grid.innerHTML = icons.map(icon => `
+    <div class="img-card" id="icon-card-${icon.id}">
+      <div style="width:100%;height:160px;background:#111;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
+        <img
+          src="${icon.url}"
+          alt="${icon.label}"
+          style="max-width:140px;max-height:120px;object-fit:contain;display:block"
+          onerror="this.style.display='none';document.getElementById('icon-ph-${icon.id}').style.display='flex'"
+        />
+        <div id="icon-ph-${icon.id}" style="display:none;flex-direction:column;align-items:center;gap:8px">
+          <span style="font-size:36px;opacity:.3">🖼️</span>
+          <span style="font-size:11px;color:#6b7280">Not uploaded yet</span>
+        </div>
+      </div>
+      <div class="img-info">
+        <div class="img-label">${icon.label}</div>
+        <div style="font-size:10px;color:#6b7280;margin-bottom:12px">File: ${icon.filename}</div>
+        <div class="img-actions">
+          <label class="btn-upload" style="cursor:pointer;text-align:center">
+            Upload New
+            <input type="file" accept="image/*" style="display:none" onchange="uploadIcon('${icon.id}', this.files[0])" />
+          </label>
+          <button class="btn-remove" onclick="removeIcon('${icon.id}')">Remove</button>
+        </div>
+      </div>
+    </div>
+  `).join('')
+}
+
+async function uploadIcon(id, file) {
+  if (!file) return
+  const form = new FormData()
+  form.append('icon', file)
+  toast('Uploading icon…')
+  const res  = await fetch(`${API}/icons/upload/${id}`, { method: 'POST', body: form })
+  const data = await res.json()
+  if (data.success) { toast('Icon updated! Refresh the website to see it.'); loadIcons() }
+  else toast(data.error || 'Upload failed', true)
+}
+
+async function removeIcon(id) {
+  if (!confirm('Remove this icon? The old file will be deleted from the site.')) return
+  const res  = await fetch(`${API}/icons/${id}`, { method: 'DELETE' })
+  const data = await res.json()
+  if (data.success) { toast('Icon removed'); loadIcons() }
+  else toast(data.error || 'Failed to remove', true)
 }
 
 // ── GALLERY ──

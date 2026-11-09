@@ -15,6 +15,7 @@ const scoresRouter  = require('./routes/scores')
 const feesRouter    = require('./routes/fees')
 const portalRouter   = require('./routes/portal')
 const galleryRouter  = require('./routes/gallery')
+const iconsRouter    = require('./routes/icons')
 
 const app  = express()
 const PORT = process.env.PORT || 5002
@@ -51,6 +52,7 @@ app.use('/api/scores', scoresRouter)
 app.use('/api/fees',   feesRouter)
 app.use('/api/portal',  portalRouter)
 app.use('/api/gallery', galleryRouter)
+app.use('/api/icons',   iconsRouter)
 
 // Admin panel
 app.use('/admin', adminRouter)
