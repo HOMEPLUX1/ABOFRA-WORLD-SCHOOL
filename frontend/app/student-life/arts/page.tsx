@@ -31,7 +31,6 @@ export default function ArtsPage() {
             { icon: '🌍', title: 'Cultural Day', desc: 'Annual celebration of Ghana\'s rich cultural heritage' },
           ].map((item, i) => (
             <div key={i} className="flex gap-4 items-start p-4 rounded-xl border border-gray-200" style={{ backgroundColor: '#fafafa' }}>
-              <span className="text-3xl shrink-0 emoji-icon">{item.icon}</span>
               <div>
                 <p className="font-extrabold text-sm text-gray-800 uppercase">{item.title}</p>
                 <p className="text-xs text-gray-500 mt-0.5">{item.desc}</p>

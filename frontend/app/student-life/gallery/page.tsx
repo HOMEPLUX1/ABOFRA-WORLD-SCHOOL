@@ -39,7 +39,6 @@ export default function GalleryPage() {
 
         {photos.length === 0 ? (
           <div className="p-10 rounded-xl border-2 border-dashed border-gray-300 text-center mb-6">
-            <p className="text-4xl mb-3">📸</p>
             <p className="font-bold text-gray-700 mb-1">No photos yet</p>
             <p className="text-sm text-gray-500">Photos will appear here once uploaded from the admin portal.</p>
           </div>

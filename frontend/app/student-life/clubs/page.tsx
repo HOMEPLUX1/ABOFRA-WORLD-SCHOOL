@@ -34,7 +34,6 @@ export default function ClubsPage() {
         <div className="space-y-3 mb-6">
           {clubs.map((club, i) => (
             <div key={i} className="flex gap-4 items-start p-4 rounded-xl border border-gray-200" style={{ backgroundColor: '#fafafa' }}>
-              <span className="text-2xl shrink-0 emoji-icon">{club.icon}</span>
               <div className="flex-1">
                 <div className="flex items-center gap-3 flex-wrap">
                   <p className="font-extrabold text-sm text-gray-800">{club.name}</p>
