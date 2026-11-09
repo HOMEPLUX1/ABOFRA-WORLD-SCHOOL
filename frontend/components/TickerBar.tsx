@@ -35,7 +35,7 @@ const socials = [
   { label: 'Facebook',  href: 'https://www.facebook.com/profile.php?id=100063605018881',  icon: <FaFacebook  size={18} color="#1877F2" /> },
   { label: 'TikTok',   href: 'https://www.tiktok.com/@abofra.world.scho',    icon: <TikTokIcon /> },
   { label: 'Instagram', href: 'https://www.instagram.com/AbofraWorldSchool', icon: <InstagramIcon /> },
-  { label: 'YouTube',  href: 'https://www.youtube.com/@AbofraWorldSchool',   icon: <FaYoutube   size={18} color="#FF0000" /> },
+  { label: 'YouTube',  href: 'https://www.youtube.com/@abofraworldschool4665',   icon: <FaYoutube   size={18} color="#FF0000" /> },
 ]
 
 const textItems = [
