@@ -13,7 +13,8 @@ const ttsRouter     = require('./routes/tts')
 const smsRouter     = require('./routes/sms')
 const scoresRouter  = require('./routes/scores')
 const feesRouter    = require('./routes/fees')
-const portalRouter  = require('./routes/portal')
+const portalRouter   = require('./routes/portal')
+const galleryRouter  = require('./routes/gallery')
 
 const app  = express()
 const PORT = process.env.PORT || 5002
@@ -48,7 +49,8 @@ app.use('/api/tts',     ttsRouter)
 app.use('/api/sms',    smsRouter)
 app.use('/api/scores', scoresRouter)
 app.use('/api/fees',   feesRouter)
-app.use('/api/portal', portalRouter)
+app.use('/api/portal',  portalRouter)
+app.use('/api/gallery', galleryRouter)
 
 // Admin panel
 app.use('/admin', adminRouter)
